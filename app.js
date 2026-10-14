@@ -1,0 +1,45 @@
+const $=s=>document.querySelector(s);
+const panels=[...document.querySelectorAll('.panel')];
+const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+const mobile=matchMedia('(max-width:800px)');
+let page=0,lockedUntil=0,returnFocus=null;
+const asset=(name)=>`assets/${name}`;
+const characters=[
+ {id:'shixu',name:'时绪',en:'SHI XU',anchor:'深红双马尾、短齐刘海、玉色长耳坠；灰绿半透明高领配米色蕾丝、深色层叠裙片、黑靴',surface:'找卵冒险',deep:'不让“妈妈已经不在”成为完成时'},
+ {id:'linqing',name:'鳞青',en:'LIN QING',anchor:'偏中性女性；银灰锁子甲兜帽、旧化浅灰甲衣、额饰与红色小宝石',surface:'把队伍安全带进带出',deep:'在危险发生前先一步挡住'},
+ {id:'yingyi',name:'影裔',en:'YING YI',anchor:'极瘦高、浅色侧编长辫、黑色长衣',surface:'看懂规则、降低变量',deep:'避免错误理解造成不可逆代价'},
+ {id:'lansheng',name:'澜生',en:'LAN SHENG',anchor:'珍珠肉色鳞肤、浅青胸光、指蹼与大薄膜鳍',surface:'找卵、获得怀表',deep:'让“今天这个我”逃离每日重置'}
+];
+characters.forEach(c=>{
+ const article=document.createElement('article');article.className='character';
+ const body=c.id==='linqing'?1:2,head=c.id==='linqing'?2:1;
+ article.innerHTML=`<div class="character-art"><button class="character-body image-view" data-image="assets/${c.id}-original-${body}.png" aria-label="查看${c.name}全身高清原图"><img src="assets/${c.id}-original-${body}.png" alt="${c.name}全身正背面原始设定图"></button><button class="character-portrait image-view" data-image="assets/${c.id}-original-${head}.png" aria-label="查看${c.name}细节高清原图"><img src="assets/${c.id}-original-${head}.png" alt="${c.name}头像与细节原图"></button></div><h3>${c.name}<small>${c.en}</small></h3><p class="anchor">${c.anchor}</p><div class="desire"><small>表层欲望 → 深层欲望</small><p>${c.surface}</p><p><span class="arrow">↳</span>${c.deep}</p></div>`;
+ $('#character-grid').append(article);
+});
+const scenes=[['scene-7','场景7','#9ec7d1','#457f8a'],['scene-4','场景4','#80c8ca','#ba8850'],['scene-2','场景2','#b4cccf','#bc783e'],['scene-1','场景1','#edb361','#9a5c30'],['scene-3','场景3','#dbbc88','#926948'],['scene-5','场景5','#e9a349','#8e502b'],['prop-2','道具2','#b7bfc4','#777f86'],['prop-1','道具1','#a9c2ad','#6c8d83'],['scene-8','场景8','#8cb4b7','#4d8b87']];
+scenes.forEach(([id,label,a,b])=>{const el=document.createElement('button');el.className='scene-cell image-view';el.dataset.image=asset(id+'.png');el.setAttribute('aria-label','放大'+label);el.innerHTML=`<img src="${asset(id+'.png')}" alt="${label}"><span class="color-chip" aria-label="主光冷暖色参考"><i style="--chip:${a}"></i><i style="--chip:${b}"></i></span><span class="scene-label">${label}</span>`;$('#scene-grid').append(el);});
+// Retain the original first-page collage positions behind the workflow.
+const collagePositions=[['scene-3',-2,12,8,20],['linqing-2',10.5,6,5.5,13],['scene-1',23.7,15.4,6.4,16.5],['yingyi-1',42,17.5,5.1,17.5],['shixu-1',56.7,-2,6.7,23],['lansheng-1',64.6,12.6,4.3,10.6],['prop-2',75.4,21.5,7.9,8.7],['scene-5',55.5,26.8,7,9],['prop-4',50.9,34,3.7,5],['scene-4',50.9,41.5,4.6,6],['scene-6',46.6,41.6,3.2,3.7],['scene-7',37.2,41.3,6.5,6.5],['prop-3',9.1,38.2,5.6,5.5],['scene-8',-1,45.5,10.2,12],['scene-1',18.2,50.3,5.5,6],['prop-1',30.8,49.3,6,7],['scene-2',31.8,56.5,4.9,6],['prop-2',41.6,52.7,8.7,13.3],['linqing-5',43.3,64.8,5.5,5.5],['scene-7',24.5,71.3,4.2,5],['yingyi-1',52.2,72,3.1,8],['linqing-3',83.2,72.4,3.8,7.5],['scene-4',93.3,72,8.4,7.5],['prop-5',34.6,83.7,5.1,15.1],['scene-8',2,88,10.5,10],['prop-4',90.8,39.2,10,3.3],['scene-6',89.7,54,4.4,4],['scene-5',17.3,32.5,3.4,1.7],['scene-2',60.4,28.5,27.4,37.3]];
+collagePositions.forEach(([id,x,y,w,h])=>{const im=document.createElement('img');im.src=asset(id+'.webp');im.alt='';im.style.cssText=`left:${x}%;top:${y}%;width:${w}%;height:${h}%`;$('.workflow-collage').append(im);});
+const originalFilm=document.createElement('img');originalFilm.src='assets/film-1.jpg';originalFilm.alt='';originalFilm.style.cssText='left:.2%;top:65.1%;width:18.7%;height:28%';$('.workflow-collage').append(originalFilm);
+function videoTile(n){const num=String(n).padStart(2,'0'),b=document.createElement('button');b.className='video-tile';b.setAttribute('aria-label',`播放视频 ${n}.mp4`);b.setAttribute('aria-pressed',String(n===1));b.dataset.film=n;b.innerHTML=`<img src="assets/video-${num}.jpg" alt="视频 ${n} 缩略图"><span>${num}</span>`;b.addEventListener('click',()=>{const v=$('#motion-film');v.pause();v.src=`assets/video-${num}.mp4`;v.poster=`assets/video-${num}.jpg`;v.load();v.play().catch(()=>{});$('#film-label').textContent=`${num} / ${n}.mp4`;document.querySelectorAll('.video-tile').forEach(t=>t.setAttribute('aria-pressed',String(t===b)));});return b;}
+[9,10,11].forEach(n=>$('#motion-top').append(videoTile(n)));[1,2,3,4].forEach(n=>$('#motion-left').append(videoTile(n)));[5,6,7,8].forEach(n=>$('#motion-right').append(videoTile(n)));
+panels.forEach((p,i)=>{const b=document.createElement('button');b.dataset.page=i;b.setAttribute('aria-label',p.getAttribute('aria-label'));b.title=p.getAttribute('aria-label');$('.page-navigation').append(b);});
+function resize(){document.documentElement.style.setProperty('--stage-scale',String(Math.min(innerWidth/1600,innerHeight/900)));}
+function goTo(next,{history=true}={}){
+ next=Number.isFinite(next)?Math.max(0,Math.min(panels.length-1,next)):0;
+ const previous=page;page=next;lockedUntil=performance.now()+(reduced.matches?50:1450);
+ if(!window.PortfolioMotion)$('#track').style.transform=`translate3d(-${page*100}vw,0,0)`;
+ panels.forEach((p,i)=>{p.classList.toggle('active',i===page);p.inert=i!==page;if(i!==page)p.querySelectorAll('video').forEach(v=>v.pause());});
+ window.PortfolioMotion?.transition(panels[previous],panels[page],page>=previous?1:-1);
+ document.querySelectorAll('.page-navigation button').forEach((b,i)=>{if(i===page)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+ $('.page-count').innerHTML=`${String(page+1).padStart(2,'0')} <i>/</i> 07`;$('#previous-page').disabled=page===0;$('#next-page').disabled=page===panels.length-1;$('#page-announcement').textContent=`${panels[page].getAttribute('aria-label')}，第 ${page+1} 页，共 ${panels.length} 页`;
+ if(history&&location.hash!==`#${page+1}`)window.history.pushState(null,'',`#${page+1}`);
+}
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goTo(Number(b.dataset.page))));$('#previous-page').addEventListener('click',()=>goTo(page-1));$('#next-page').addEventListener('click',()=>goTo(page+1));
+const lightbox=$('#lightbox');document.querySelectorAll('.image-view').forEach(b=>b.addEventListener('click',()=>{returnFocus=b;const img=document.createElement('img');img.src=b.dataset.image;img.alt=b.querySelector('img').alt;img.draggable=false;$('.lightbox-stage').replaceChildren(img);$('#lightbox-caption').textContent=img.alt;lightbox.showModal();$('.lightbox-close').focus();}));$('.lightbox-close').addEventListener('click',()=>lightbox.close());lightbox.addEventListener('click',e=>{if(e.target===lightbox)lightbox.close();});lightbox.addEventListener('close',()=>{$('.lightbox-stage').replaceChildren();returnFocus?.focus();});
+window.addEventListener('keydown',e=>{if(lightbox.open||e.target.closest('video,input,textarea'))return;const keys={ArrowRight:1,ArrowDown:1,PageDown:1,ArrowLeft:-1,ArrowUp:-1,PageUp:-1};if(keys[e.key]&&!(mobile.matches&&['ArrowDown','ArrowUp'].includes(e.key))){e.preventDefault();goTo(page+keys[e.key]);}if(e.key==='Home'){e.preventDefault();goTo(0);}if(e.key==='End'){e.preventDefault();goTo(panels.length-1);}});
+let wheelSum=0,wheelAt=0;window.addEventListener('wheel',e=>{if(mobile.matches||lightbox.open||e.ctrlKey||e.target.closest('video'))return;e.preventDefault();const now=performance.now();if(now<lockedUntil)return;if(now-wheelAt>180)wheelSum=0;wheelAt=now;wheelSum+=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;if(Math.abs(wheelSum)>70){goTo(page+Math.sign(wheelSum));wheelSum=0;}},{passive:false});
+let touchStart=null;$('#viewport').addEventListener('touchstart',e=>{if(e.target.closest('video'))return;touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});$('#viewport').addEventListener('touchend',e=>{if(!touchStart)return;const dx=touchStart.x-e.changedTouches[0].clientX,dy=touchStart.y-e.changedTouches[0].clientY;touchStart=null;if(Math.abs(dx)>65&&Math.abs(dx)>Math.abs(dy)*1.5)goTo(page+Math.sign(dx));},{passive:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});window.addEventListener('hashchange',()=>goTo(Number(location.hash.slice(1)||1)-1,{history:false}));window.addEventListener('resize',resize);resize();goTo(Number(location.hash.slice(1)||1)-1,{history:false});
+

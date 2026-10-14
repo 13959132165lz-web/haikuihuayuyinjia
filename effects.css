@@ -1,0 +1,28 @@
+/* Motion is an enhancement: the static portfolio remains usable without it. */
+.motion-ready #track{display:block;position:relative;transform:none!important;transition:none!important}
+.motion-ready .panel{position:absolute;inset:0;visibility:hidden;pointer-events:none;backface-visibility:hidden}
+.motion-ready .panel.active,.motion-ready .panel.transitioning{visibility:visible}
+.motion-ready .panel.active{pointer-events:auto;z-index:2}
+.motion-ready .panel.transitioning{z-index:1}
+.motion-ready .panel.active .stage{backface-visibility:hidden}
+.ink-char{display:inline-block;transform-origin:50% 75%;white-space:pre;font:inherit;letter-spacing:inherit;margin:0!important}
+.cover h1 span.ink-char,.cover h1 span.ink-char+span.ink-char{display:inline-block;font:inherit;letter-spacing:inherit}
+.cover h1>span{display:block}
+.motion-ready .image-view img,.motion-ready .video-tile img{transform-origin:center;backface-visibility:hidden}
+.motion-ready .image-view:hover img,.motion-ready .video-tile:hover img{transform:none;filter:none}
+.motion-ready .workflow-collage{pointer-events:auto}
+.motion-ready .workflow-shade{pointer-events:none}
+.fx-root{position:fixed;inset:0;pointer-events:none;z-index:1000;overflow:hidden;contain:layout style}
+.fx-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.glass-cursor{position:absolute;top:0;left:0;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;opacity:0;will-change:transform;transition:opacity .25s,width .45s,height .45s,margin .45s;background:radial-gradient(circle at 30% 23%,#ffffffe0 0%,#ffffff20 7%,#c9f9ec06 44%,#ffffff16 71%,#ffffff65 94%,#ffffff12);border:1px solid #efffffc2;box-shadow:inset 1px 1px 3px #ffffffb5,inset -1px -2px 6px #9cd7d544,0 2px 9px #0002;backdrop-filter:blur(2px) saturate(1.15) brightness(1.1)}
+.glass-cursor:before{content:'';position:absolute;inset:4px 5px 13px 6px;border-top:1px solid #fff8;border-radius:50%;transform:rotate(-30deg)}
+.glass-cursor:after{content:'';position:absolute;left:50%;top:50%;width:3px;height:3px;border-radius:50%;background:#f0fff7;transform:translate(-50%,-50%);box-shadow:0 0 5px #dbfff388}
+.glass-cursor.on-media{width:54px;height:54px;margin:-27px 0 0 -27px;background:radial-gradient(circle at 28% 24%,#ffffff99,#ddfff21a 13%,#dcfcfa05 57%,#c8eee924 83%,#ffffffa1 97%);border-color:#f0fffc9c;backdrop-filter:blur(1.3px) saturate(1.25) brightness(1.08)}
+.glass-cursor.pressed{box-shadow:inset 1px 1px 9px #ffffffe0,inset -3px -3px 12px #8ed4d588,0 0 16px #adf7ee2b}
+.inertia-ring{position:absolute;top:0;left:0;width:52px;height:52px;margin:-26px 0 0 -26px;border:1px solid #b3e5da55;border-radius:50%;opacity:0;will-change:transform;box-shadow:inset 0 0 8px #e7fff508}
+.fx-root.tracking .glass-cursor,.fx-root.tracking .inertia-ring{opacity:1}
+.glass-pointer,.glass-pointer button,.glass-pointer a,.glass-pointer video,.glass-pointer dialog{cursor:none!important}
+.liquid-active{will-change:transform,filter;transition:none!important;isolation:isolate}
+img,video{-webkit-user-select:none;user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}
+@media(pointer:coarse),(prefers-reduced-motion:reduce){.fx-root{display:none}.glass-pointer,.glass-pointer button,.glass-pointer a,.glass-pointer video,.glass-pointer dialog{cursor:auto!important}}
+@media(prefers-reduced-motion:reduce){.motion-ready .panel{will-change:auto}.ink-char{transform:none!important;filter:none!important}}
