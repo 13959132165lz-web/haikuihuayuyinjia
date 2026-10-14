@@ -7,6 +7,7 @@
 .motion-ready .panel.active .stage{backface-visibility:hidden}
 .ink-char{display:inline-block;transform-origin:50% 75%;white-space:pre;font:inherit;letter-spacing:inherit;margin:0!important}
 .cover h1 span.ink-char,.cover h1 span.ink-char+span.ink-char{display:inline-block;font:inherit;letter-spacing:inherit}
+.scene-aside h2 span.ink-char{display:inline-block;font:inherit;color:inherit;letter-spacing:inherit}
 .cover h1>span{display:block}
 .motion-ready .image-view img,.motion-ready .video-tile img{transform-origin:center;backface-visibility:hidden}
 .motion-ready .image-view:hover img,.motion-ready .video-tile:hover img{transform:none;filter:none}
