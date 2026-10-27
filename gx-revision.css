@@ -164,3 +164,75 @@ body:has(.gx-contact.active) .navigation,body:has(.gx-contact.active) .page-cont
  body:has(.gx-contact.active) .page-controls{background:#e5e8e0d9;color:#22382c}
 }
 @media(prefers-reduced-motion:reduce){.gx-flip-inner{transition:none}.gx-tone-flip:is(:hover,:focus-visible,[aria-pressed=true]) .gx-flip-inner{transform:rotateY(180deg)}}
+
+/* Original rectangular studies, with complete biographies always on the page. */
+.gx-people .gx-subslide:first-child .gx-subbackground{background:linear-gradient(#180d0b82,#180d0bc7),var(--sub-bg) center/cover}
+.gx-people .gx-subslide:first-child .gx2-heading-note{text-align:right;left:290px;right:0;top:54px;max-width:none;color:#eee1cd}
+.gx2-heading-note>span[lang=en]{display:block;font:13px/1.7 Arial,sans-serif;letter-spacing:.4px;margin-top:9px;color:#dacdbd}
+.gx-cast-label{display:grid;grid-template-columns:80px 1fr;gap:16px;text-align:right;align-items:center}
+.gx-cast-label>span{display:block;width:100%}.gx-cast-label small{max-width:none;min-height:51px;text-align:right}
+.gx-original-card .gx-cast-art{padding-left:53px;display:flex}
+.gx-cast-sheet{position:absolute;inset:0 0 0 53px;background:#f4f3ef;border:1px solid #eee9dc5c}
+.gx-cast-sheet img{object-fit:contain}
+.gx-original-card .gx-cast-head{left:0;top:22px;width:96px;height:130px;border:4px solid #34231d;z-index:2}
+.gx-original-card .gx-cast-head img{object-fit:cover;object-position:center 20%}
+.gx-original-study{position:absolute;left:90px;right:90px;top:215px;height:268px}
+.gx-original-rail{height:220px;display:grid;grid-template-columns:.95fr 1.15fr 1.45fr .65fr;gap:28px;align-items:center}
+.gx-original-frame{display:block;min-width:0;background:#f5f4ef;box-shadow:0 10px 30px #0002;height:100%}
+.gx-original-frame[hidden]{display:none}
+.gx-original-frame img{object-fit:contain;object-position:center}
+.gx-original-frame-0{height:220px;order:2}.gx-original-frame-1{height:175px;order:0}
+.gx-original-frame-2{height:195px;order:1}.gx-original-frame-3{height:110px;order:3}
+.gx-original-rail:has(.gx-original-frame-2[hidden]){grid-template-columns:1.5fr 1fr;max-width:1100px;margin:auto}
+.gx-original-rail:has(.gx-original-frame-1[hidden]){display:flex;justify-content:center}
+.gx-original-rail:has(.gx-original-frame-1[hidden]) .gx-original-frame-0{height:220px;width:850px}
+.gx-original-options{display:flex;justify-content:center;gap:28px;margin-top:16px}
+.gx-original-options button{display:flex;gap:9px;align-items:center;font-size:14px;color:#e4decd;padding:7px 0;border-bottom:1px solid transparent;opacity:.6;white-space:nowrap}
+.gx-original-options button>span{font:9px Arial;letter-spacing:1px;opacity:.65}
+.gx-original-options button[aria-pressed=true]{opacity:1;border-color:#e2d2ae}
+.gx-original-profile{position:absolute;left:90px;right:90px;top:487px;bottom:108px;display:grid;grid-template-columns:400px 1fr;gap:62px}
+.gx-original-intro .gx-name{height:54px!important;gap:24px!important}
+.gx-original-intro .gx-name h3{width:75px!important;height:65px!important}
+.gx-people .gx-original-intro .gx-tag{font-size:18px;line-height:1.7;margin-top:6px}
+.gx-people .gx-original-intro .gx-keywords{margin-top:7px;font-size:11px}
+.gx-people .gx-original-intro .gx-ability{font-size:13px;line-height:1.7;margin-top:10px}
+.gx-original-intro .gx-ability b{display:inline;margin-right:12px;font-size:11px}
+.gx-people .gx-original-intro blockquote{font-size:16px;line-height:1.7;margin-top:10px;padding-left:12px}
+.gx-people .gx-original-story .gx-dual{margin:0;padding:0 0 12px;gap:32px;border-top:0}
+.gx-people .gx-original-story .gx-dual p{font-size:14px;line-height:1.6;margin-top:5px}
+.gx-full-biography h4{font-size:12px;font-weight:400;letter-spacing:2px;color:#d0c8b1;margin:12px 0 10px}
+.gx-full-biography h4>span{font:9px Arial;letter-spacing:1.5px;margin-left:15px;opacity:.65}
+.gx-full-biography>p{font-size:15px;line-height:1.85;text-align:justify;color:#e0dfd4;margin:0}
+.gx-female-study .gx-subbackground{background:linear-gradient(#0d0f0d5e 0%,#11171470 40%,#0e1513f5 62%),var(--sub-bg) center/cover}
+.gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-character-artwork{top:215px;bottom:281px}
+.gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-person-copy{top:204px}
+.gx-people .gx-subslide:not(.gx-female-study) .gx-person-copy .gx-tag{font-size:19px;margin-top:8px}
+.gx-people .gx-subslide:not(.gx-female-study) .gx-person-copy .gx-dual{margin-top:12px;padding:12px 0}
+.gx-people .gx-subslide:not(.gx-female-study) .gx-person-copy .gx-ability{margin-top:12px}
+.gx-people .gx-subslide:not(.gx-female-study) .gx-person-copy blockquote{font-size:17px;margin-top:12px}
+.gx-people .gx-character-artwork .gx-art-note{bottom:0}
+.gx-male-biography{position:absolute;left:90px;right:90px;top:610px;padding-top:8px;border-top:1px solid #b4c6b642}
+.gx-male-biography>p{font-size:16px;line-height:1.9}
+@media(max-width:800px){
+ .gx-people .gx-subslide:first-child .gx2-heading-note{position:relative;inset:auto;text-align:right;font-size:14px;margin-top:16px}
+ .gx2-heading-note>span[lang=en]{font-size:11px;line-height:1.8}
+ .gx-cast-label{display:block;text-align:right}.gx-cast-label>.gx-letter{margin-left:auto}
+ .gx-cast-label small{min-height:65px}.gx-original-card .gx-cast-art{padding:0}
+ .gx-cast-sheet{inset:0 0 0 22px}.gx-original-card .gx-cast-head{width:67px;height:91px;left:-4px;top:15px;border-width:2px}
+ .gx-original-study{position:relative;inset:auto;height:auto;margin-top:30px}
+ .gx-original-rail{height:260px;gap:10px;grid-template-columns:1fr 1.2fr 1fr .55fr}
+ .gx-original-frame-0{height:175px}.gx-original-frame-1{height:220px}.gx-original-frame-2{height:250px}.gx-original-frame-3{height:110px}
+ .gx-original-rail:has(.gx-original-frame-1[hidden]) .gx-original-frame-0{width:100%;height:230px}
+ .gx-original-options{gap:9px 16px;flex-wrap:wrap;margin-top:22px}
+ .gx-original-options button{font-size:12px;gap:5px}.gx-original-options button>span{font-size:8px}
+ .gx-original-profile{position:relative;inset:auto;display:block;margin-top:30px}
+ .gx-original-intro .gx-name{height:70px!important}.gx-original-intro .gx-name h3{height:80px!important;width:90px!important}
+ .gx-people .gx-original-intro .gx-tag{font-size:19px}.gx-people .gx-original-intro .gx-keywords{font-size:12px}
+ .gx-people .gx-original-intro .gx-ability{font-size:14px;line-height:1.9}
+ .gx-people .gx-original-intro blockquote{font-size:18px;margin-top:20px}
+ .gx-original-story{margin-top:30px}.gx-people .gx-original-story .gx-dual{padding-bottom:20px;gap:16px}
+ .gx-full-biography h4{margin-top:22px}.gx-full-biography>p{font-size:15px;line-height:2}
+ .gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-character-artwork{position:relative;inset:auto;height:390px}
+ .gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-person-copy{position:relative;inset:auto}
+ .gx-male-biography{position:relative;inset:auto;margin-top:25px;padding-top:0}.gx-male-biography>p{font-size:15px;line-height:2}
+}
