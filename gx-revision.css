@@ -208,6 +208,11 @@ body:has(.gx-contact.active) .navigation,body:has(.gx-contact.active) .page-cont
 .gx-people .gx-subslide:not(.gx-female-study) .gx-person-copy .gx-ability{margin-top:12px}
 .gx-people .gx-subslide:not(.gx-female-study) .gx-person-copy blockquote{font-size:17px;margin-top:12px}
 .gx-people .gx-character-artwork .gx-art-note{bottom:0}
+.gx-people .gx-subslide:not(:first-child) .gx2-heading{top:55px}
+.gx-people .gx-subslide:not(:first-child) .gx2-heading h2{width:380px;height:224px;margin-left:-95px}
+.gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-character-artwork{left:290px;width:665px}
+.gx-people .gx-person-copy .gx-name{height:30px}
+.gx-original-intro .gx-name{height:24px!important}
 .gx-male-biography{position:absolute;left:90px;right:90px;top:610px;padding-top:8px;border-top:1px solid #b4c6b642}
 .gx-male-biography>p{font-size:16px;line-height:1.9}
 @media(max-width:800px){
@@ -231,4 +236,9 @@ body:has(.gx-contact.active) .navigation,body:has(.gx-contact.active) .page-cont
  .gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-character-artwork{position:relative;inset:auto;height:390px}
  .gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-person-copy{position:relative;inset:auto}
  .gx-male-biography{position:relative;inset:auto;margin-top:25px;padding-top:0}.gx-male-biography>p{font-size:15px;line-height:2}
+ .gx-people .gx-subslide:not(:first-child) .gx2-heading{top:auto}
+ .gx-people .gx-subslide:not(:first-child) .gx2-heading h2{width:260px;height:210px;margin-left:-65px}
+ .gx-people .gx-subslide:not(.gx-female-study):not(:first-child) .gx-character-artwork{left:auto;width:100%}
+ .gx-people .gx-person-copy .gx-name{height:30px}
+ .gx-original-intro .gx-name{height:24px!important}
 }
