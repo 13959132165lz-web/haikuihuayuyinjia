@@ -124,7 +124,9 @@ window.GX_ORIGINALS={
    "name": "便装",
    "group": 15,
    "files": [
-    "original-15.webp"
+    "original-yihua-casual-0.webp",
+    "original-yihua-casual-1.webp",
+    "original-yihua-casual-2.webp"
    ],
    "bg": "p12-bg.webp"
   },
@@ -140,6 +142,22 @@ window.GX_ORIGINALS={
    "bg": "p12-bg.webp"
   }
  ],
+ "overview": {
+  "shen": {
+   "name": "玄红",
+   "files": [
+    "original-1-1.webp",
+    "original-1-2.webp"
+   ]
+  },
+  "lushi": {
+   "name": "玄甲",
+   "files": [
+    "original-16-4.webp",
+    "original-16-1.webp"
+   ]
+  }
+ },
  "dims": {
   "original-5-2.webp": [
    1280,
@@ -305,9 +323,17 @@ window.GX_ORIGINALS={
    955,
    1280
   ],
-  "original-15.webp": [
+  "original-yihua-casual-0.webp": [
    1400,
-   788
+   1125
+  ],
+  "original-yihua-casual-1.webp": [
+   1158,
+   1984
+  ],
+  "original-yihua-casual-2.webp": [
+   575,
+   958
   ],
   "original-12-3.webp": [
    1280,
@@ -323,6 +349,22 @@ window.GX_ORIGINALS={
   ],
   "original-12-1.webp": [
    955,
+   1280
+  ],
+  "original-1-1.webp": [
+   1280,
+   720
+  ],
+  "original-1-2.webp": [
+   730,
+   1280
+  ],
+  "original-16-4.webp": [
+   1280,
+   955
+  ],
+  "original-16-1.webp": [
+   853,
    1280
   ],
   "character-bg-queen.webp": [
