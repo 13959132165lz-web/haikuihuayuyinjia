@@ -107,7 +107,7 @@
   const h=hover;restore(h.img);bursts.push({points:h.points,rect:h.img.getBoundingClientRect(),born:performance.now(),x:point.x,y:point.y});if(bursts.length>3)bursts.shift();hover=null;cursor.classList.remove('on-media');activity=performance.now();schedule();
  }
  function identify(target){
-  if(!(target instanceof Element))return null;
+  if(!(target instanceof Element)||target.closest('.gx-contact'))return null;
   if(target.tagName==='IMG')return target;
   const tile=target.closest('.image-view,.video-tile,.media-tile');return tile?.querySelector('img')||null;
  }
