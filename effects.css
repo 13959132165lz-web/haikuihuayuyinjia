@@ -2,6 +2,7 @@
 .motion-ready #track{display:block;position:relative;transform:none!important;transition:none!important}
 .motion-ready .panel{position:absolute;inset:0;visibility:hidden;pointer-events:none;backface-visibility:hidden}
 .motion-ready .panel.active,.motion-ready .panel.transitioning{visibility:visible}
+.motion-ready .panel:not(.active):not(.transitioning){content-visibility:hidden}
 .motion-ready .panel.active{pointer-events:auto;z-index:2}
 .motion-ready .panel.transitioning{z-index:1}
 .motion-ready .panel.active .stage{backface-visibility:hidden}
