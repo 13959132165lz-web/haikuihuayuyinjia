@@ -1,0 +1,6 @@
+/* Crop background imagery to cover any viewport, including 21:9. */
+.panel{background-size:cover;background-position:center;background-repeat:no-repeat}
+.viewport-backdrop{position:absolute;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat}
+.has-viewport-backdrop>.stage{z-index:1}
+.has-viewport-backdrop .gx-subbackground,.has-viewport-backdrop .gx-tone::before{visibility:hidden}
+.gx-shot-production[data-case-id="case2"] .gx-shot-count{left:0;right:auto}

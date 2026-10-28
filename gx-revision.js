@@ -32,13 +32,7 @@
  };
  const subnav=(items,label)=>`<nav class="gx-subnav" aria-label="${label}横向分页"><button data-substep="-1" aria-label="上一子页">←</button><div>${items.map((name,i)=>`<button data-subpage="${i}" aria-current="${!i}">${name}</button>`).join('')}</div><button data-substep="1" aria-label="下一子页">→</button><span class="gx-subcount" aria-live="polite">01 / ${String(items.length).padStart(2,'0')}</span></nav>`;
  const slide=(label,bg,body,i)=>`<article class="gx-subslide" aria-label="${label}" ${i?'inert':''}><div class="gx-subbackground" style="--sub-bg:url('${base+bg}')"></div>${body}</article>`;
- const videoPanel=document.querySelector('.gx-showcase');
- videoPanel.setAttribute('aria-label','古相思曲 · 视频展示');
- videoPanel.querySelector('header').outerHTML=head('title','古相思曲','FILM SHOWCASE');
- videoPanel.querySelector('.gx-film-name').textContent='古相思曲 / 动态影像';
- videoPanel.querySelector('.gx-footnote').textContent='ECHOES OF ANCIENT YEARNING / FILM';
- const film=videoPanel.querySelector('video');film.setAttribute('aria-label','古相思曲上传视频');film.removeAttribute('poster');film.preload='metadata';
- film.addEventListener('loadedmetadata',()=>{if(film.currentTime===0&&film.duration>1)film.currentTime=.15},{once:true});film.load();
+ document.querySelector('.gx-showcase').remove();
  document.querySelector('.gx-overview header').outerHTML=head('title','古相思曲','STORY / FIVE REVERSE JOURNEYS');
  const candle=document.querySelector('.gx-overview .gx-time li:nth-child(4) .image-view');candle.dataset.image=base+'character-bg-gold.webp';candle.querySelector('img').src=candle.dataset.image;
  let people=slide('四位主要人物 · 总览','character-bg-overview.webp',`${head('characters','角色设计','CHARACTER DESIGN','被史书颠倒的人 / 史册叙事与真实叙事<span lang="en">Those Distorted by Historical Records / Narrative in Chronicles vs. True Narratives</span>')}<div class="gx-cast-overview">${cast.map((c,i)=>{const p=poses[c.id],o=originals[c.id]?.[0]||originals.overview[c.id];const art=o?overviewOriginal(c):`${crop(p.file,p.front,c.name+'正面','gx-cast-front')}${crop(p.file,p.back,c.name+'背面','gx-cast-back')}${crop(p.file,p.head,c.name+'大头特写','gx-cast-head')}`;return `<article class="gx-cast-card ${o?'gx-original-card':''}"><div class="gx-cast-art">${art}</div><button class="gx-cast-label" data-goto-person="${i+1}">${letter(c.id,c.name)}<span>${c.en}<small>${c.tag}</small></span></button></article>`}).join('')}</div>`,0);

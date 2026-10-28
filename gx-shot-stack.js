@@ -54,8 +54,8 @@
  }
  createStack({
   id:'case2',base:'assets/gx/',label:'古相思曲 · 视频与分镜',eyebrow:'CASE 02 / VIDEO / SHOT PRODUCTION',sectionTitle:'视频与分镜',
-  title:'把抽象情绪翻译成<br>可拍的物理现象',english:'Translate abstract emotions into<br>photographable physical phenomena.',spacing:170,
-  clips:[{file:'shot-01',duration:'11.48'},{file:'shot-05',duration:'8.20'},{file:'shot-03',duration:'15.07'},{file:'shot-04',duration:'15.07'},{file:'shot-02',duration:'15.07'}],
+  title:'把抽象情绪翻译成<br>可拍的物理现象',english:'Translate abstract emotions into<br>photographable physical phenomena.',spacing:160,cardWidth:600,
+  clips:[{file:'shot-01',duration:'11.48'},{file:'shot-05',duration:'8.20'},{file:'shot-03',duration:'15.07'},{file:'shot-04',duration:'15.07'},{file:'shot-02',duration:'15.07'},{file:'showcase',duration:'15.07'}],
   footerLabel:'镜头组织方法',footerLink:'镜头组织方法 ↓',footer:'<div class="gx-shot-method-heading"><p>镜头组织方法 <span>SHOT BREAKDOWN</span></p><p>每个镜头先声明禁用运镜清单。</p></div><div class="gx-shot-dimensions"><div><b>戏型</b><p>对白文戏 / 反应独白 / 动作武打 / 节奏 / 氛围仪式 / 空镜过渡</p></div><div><b>人物数量</b><p>单人 / 双人 / 多人</p></div><div><b>镜头能量</b><p>固定 / 微颤 / 稳定运动 / 高速跟拍 / 急抖</p></div><div><b>风险元素</b><p>口型 / 接触 / 道具 / 特效 / 微表情</p></div></div>'
  });
  createStack({
@@ -65,5 +65,5 @@
   clips:[{file:'pv-01',duration:'10.05'},{file:'pv-02',duration:'4.09'},{file:'pv-03',duration:'8.06'},{file:'pv-04',duration:'15.04'},{file:'pv-05',duration:'8.08'},{file:'pv-06',duration:'5.74'}],
   footerLabel:'项目定位与主命题',footerLink:'项目文案 ↓',footer:'<div class="gx-shot-method-heading"><p>项目定位 <span>PROJECT POSITIONING</span></p><p>主命题与 Slogan</p></div><div class="gx-super-copy"><div><b>项目定位</b><p>90—100s 高概念混剪 PV，极致风格化 / 复古未来主义 / 人物 IP 向科幻动作剧集。近未来超能力群像：观星署“造神”机构 × 觉醒的映射能力者。</p></div><div><b>情绪锚点</b><p>英雄并非无所不能；如果命运让你成为英雄，你能否拒绝？</p></div><div><b>Slogan</b><p>他们说我疯了，但神夺走了我的命运，那是我们彼此拯救的唯一武器。我们在废墟中背靠着背。</p></div></div>'
  });
- document.querySelector('.contents-list li:nth-child(4)').innerHTML='<button data-page="14"><span>超能映射</span><small>SUPER MAPPING / STAR DOMAIN ODYSSEY PV</small></button>';
+ document.querySelector('.contents-list li:nth-child(4)').innerHTML='<button data-page="13"><span>超能映射</span><small>SUPER MAPPING / STAR DOMAIN ODYSSEY PV</small></button>';
 })();
