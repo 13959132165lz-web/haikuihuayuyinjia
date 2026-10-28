@@ -380,7 +380,7 @@ const compile = (gl, type, source) => {
   function sync(){cancelAnimationFrame(raf);raf=0;last=0;if(panel.classList.contains('active')&&!document.hidden&&!document.querySelector('dialog[open]'))raf=requestAnimationFrame(draw);}
   new MutationObserver(sync).observe(panel,{attributes:true,attributeFilter:['class']});document.querySelectorAll('dialog').forEach(d=>new MutationObserver(sync).observe(d,{attributes:true,attributeFilter:['open']}));document.addEventListener('visibilitychange',sync);window.addEventListener('resize',sync);reduced.addEventListener('change',sync);panel.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();tiltX=Math.max(-1,Math.min(1,(e.clientX-r.left)/r.width*2-1))*.3;tiltY=Math.max(-1,Math.min(1,(e.clientY-r.top)/r.height*2-1))*.3;});panel.addEventListener('pointerleave',()=>{tiltX=tiltY=0;});canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);el.classList.remove('chrome-ready');});canvas.addEventListener('webglcontextrestored',()=>{canvas.remove();mount(el).catch(()=>{});});sync();
  }
- document.querySelectorAll('.sm-design').forEach(panel=>{
+ document.querySelectorAll('.sm-design,.gx-super-mapping').forEach(panel=>{
  const boot=()=>{if(!panel.classList.contains('active'))return;panel.querySelectorAll('[data-chrome]').forEach(el=>{if(el.dataset.chromeMounted)return;el.dataset.chromeMounted='true';mount(el).catch(()=>{});});};
  new MutationObserver(boot).observe(panel,{attributes:true,attributeFilter:['class']});boot();
  });
