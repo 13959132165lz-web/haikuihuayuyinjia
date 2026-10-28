@@ -12,6 +12,7 @@
  }
  // Split only display headings; long body copy keeps its natural line wrapping.
  document.querySelectorAll('h1,h2,h3').forEach(heading=>{
+  if(heading.classList.contains('chrome-heading'))return;
   heading.setAttribute('aria-label',heading.textContent.trim()||heading.querySelector('img')?.alt||'');
   const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT),nodes=[];
   while(walker.nextNode())nodes.push(walker.currentNode);
