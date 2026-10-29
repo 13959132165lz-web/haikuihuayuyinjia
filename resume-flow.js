@@ -9,8 +9,8 @@
  const nextButton=cover.querySelector('.home-profile-end [data-page]');nextButton.textContent='继续 · 制作工作流 →';nextButton.dataset.page='1';
  const mark=(el,wrap=false)=>{if(!el)return;el.classList.add('red-metal');el.dataset.chrome=el.innerText||el.textContent;if(wrap)el.dataset.chromeWrap='true';el.dataset.chromeTone='red';};
  cover.querySelector('.home-profile-aside h2').textContent='梁臻';
- cover.querySelectorAll('.home-profile-aside h2,.home-contact dt,.home-contact dd,.home-resume h4,.resume-date,.home-degree,.home-strength').forEach(el=>mark(el,true));
- cover.querySelectorAll('.home-resume>section:not(.home-project-experience) h3').forEach(h=>{const text=h.firstChild;if(text?.nodeType!==3)return;const span=document.createElement('span');span.textContent=text.textContent;text.replaceWith(span);mark(span);});
+ cover.querySelectorAll('.home-profile-aside h2,.home-resume h4,.resume-date,.home-degree,.home-strength').forEach(el=>mark(el,true));
+ cover.querySelectorAll('.home-resume>section h3').forEach(h=>{const text=h.firstChild;if(text?.nodeType!==3)return;const span=document.createElement('span');span.textContent=text.textContent;text.replaceWith(span);mark(span);});
  workflow.classList.add('workflow-red');
  workflow.querySelector('h2').classList.add('chrome-heading');mark(workflow.querySelector('h2'),true);
  const thesis=workflow.querySelector('.workflow-thesis');
@@ -22,7 +22,9 @@
  // A viewport-level archive survives scrolling and the transition between the first two pages.
  const archive=document.createElement('aside');archive.className='persistent-archive home-weaving';archive.setAttribute('aria-label','项目快捷文件夹');
  const folder=document.querySelector('.project-folder');archive.append(folder);document.body.append(archive);
- function syncArchive(){const visible=cover.classList.contains('active')||workflow.classList.contains('active');archive.classList.toggle('active',visible);archive.inert=!visible;archive.setAttribute('aria-hidden',String(!visible));}
+ function syncArchive(){const leaving=archive.classList.contains('departing')&&archive.parentElement.classList.contains('transitioning');const visible=cover.classList.contains('active')||workflow.classList.contains('active')||leaving;if(!leaving){document.body.append(archive);archive.classList.remove('departing');}archive.classList.toggle('active',visible);archive.inert=!visible||leaving;archive.setAttribute('aria-hidden',String(!visible));}
+ // Nest the live folder in the outgoing panel so it shares the exact page animation.
+ window.PortfolioArchive={transition(from,to){if([cover,workflow].includes(from)&&![cover,workflow].includes(to)){from.append(archive);archive.classList.add('departing');archive.classList.add('active');archive.inert=true;}else{archive.classList.remove('departing');document.body.append(archive);syncArchive();}}};
  [cover,workflow].forEach(p=>new MutationObserver(syncArchive).observe(p,{attributes:true,attributeFilter:['class']}));syncArchive();
  const scroll=cover.querySelector('.home-scroll');let previous=scroll.scrollTop,armed=false,timer=0,lastAdvance=-Infinity;
  const bottom=()=>scroll.scrollHeight>scroll.clientHeight+20&&scroll.scrollTop>=scroll.scrollHeight-scroll.clientHeight-3;

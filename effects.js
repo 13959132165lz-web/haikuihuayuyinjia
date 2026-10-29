@@ -52,6 +52,7 @@
   clearHover();
   if(reduced.matches){to.style.zIndex='2';return;}
   from.classList.add('transitioning');from.style.zIndex='1';to.style.zIndex='3';
+  window.PortfolioArchive?.transition(from,to);
   if(kind==='split'){
    to.dataset.entryTransition='center-open';
    animate(from,[{opacity:1},{opacity:.5}],{duration:1100,easing:'ease',fill:'both'});

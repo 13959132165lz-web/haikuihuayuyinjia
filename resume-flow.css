@@ -3,16 +3,17 @@
 span.red-metal{display:inline-block}.red-metal[data-chrome-wrap]{display:block}
 .red-metal canvas{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;opacity:0}
 .red-metal.chrome-ready{background:none}.red-metal.chrome-ready canvas{opacity:1}
-.home-contact{margin-top:32px;gap:12px}.home-contact dt{font-size:12px}.home-contact dd{font:800 30px/1.4 Arial,sans-serif;letter-spacing:2px}
+.home-contact{margin-top:32px;gap:12px}.home-contact dt,.home-contact dd{font:400 13px/2.1 'Microsoft YaHei',sans-serif;letter-spacing:0;color:#d8beb4}
 .home-project-experience p{margin-top:18px}.home-project-experience b{color:#f1d4c7}.home-profile{padding-bottom:190px}
-.workflow.workflow-red{background-image:url('assets/backgrounds/red.png');background-size:cover;background-position:center}
+.workflow.workflow-red{background-image:url('assets/home/workflow-6.png');background-size:cover;background-position:center}
 .workflow-red::before,.workflow-red .workflow-shade,.workflow-red .workflow-collage{display:none!important}
 .workflow-thesis>.workflow-main-thesis{font-size:26px;color:inherit}
 .workflow-red .workflow-copy h2{filter:none}.workflow-red .workflow-steps .red-metal{margin-top:47px}.workflow-red .directions .red-metal{font-size:15px}
-.persistent-archive{position:fixed;inset:0;z-index:18;pointer-events:none;visibility:hidden;opacity:0;transition:opacity .3s;isolation:isolate}
+.persistent-archive{position:fixed;inset:0;z-index:18;pointer-events:none;visibility:hidden;opacity:0;isolation:isolate}
+.persistent-archive.departing{position:absolute;pointer-events:none}.persistent-archive.departing .project-folder{pointer-events:none}
 .persistent-archive.active{visibility:visible;opacity:1}
 .persistent-archive .project-folder{pointer-events:auto;position:absolute;right:5%;bottom:90px;margin:0;width:142px;height:103px}
 .persistent-archive:not(.active) .project-folder{pointer-events:none}
 .persistent-archive .project-note .chrome-text{font-size:13px}
-@media(max-width:800px){.home-contact{display:block}.home-contact div{margin-top:18px}.home-contact dd{font-size:28px}.home-profile{padding-bottom:220px}.workflow-thesis>.workflow-main-thesis{font-size:20px}.workflow-red .workflow-steps .red-metal{margin-top:13px}.workflow-red .directions .red-metal{font-size:14px}.persistent-archive .project-folder{right:7%;bottom:85px;width:112px;height:82px}.persistent-archive .project-folder-face{padding:9px;gap:6px}.persistent-archive .project-folder-face>span:nth-child(2){font-size:10px}.persistent-archive .project-note .chrome-text{font-size:12px}}
+@media(max-width:800px){.home-contact{display:block}.home-contact div{margin-top:18px}.home-contact dd{font-size:13px}.home-profile{padding-bottom:220px}.workflow-thesis>.workflow-main-thesis{font-size:20px}.workflow-red .workflow-steps .red-metal{margin-top:13px}.workflow-red .directions .red-metal{font-size:14px}.persistent-archive .project-folder{right:7%;bottom:85px;width:112px;height:82px}.persistent-archive .project-folder-face{padding:9px;gap:6px}.persistent-archive .project-folder-face>span:nth-child(2){font-size:10px}.persistent-archive .project-note .chrome-text{font-size:12px}}
 @media(prefers-reduced-motion:reduce){.persistent-archive{transition:none}}
