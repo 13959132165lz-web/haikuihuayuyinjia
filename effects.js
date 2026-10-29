@@ -12,7 +12,7 @@
  }
  // Split only display headings; long body copy keeps its natural line wrapping.
  document.querySelectorAll('h1,h2,h3').forEach(heading=>{
-  if(heading.classList.contains('chrome-heading'))return;
+  if(heading.classList.contains('chrome-heading')||heading.classList.contains('tech-heading'))return;
   heading.setAttribute('aria-label',heading.textContent.trim()||heading.querySelector('img')?.alt||'');
   const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT),nodes=[];
   while(walker.nextNode())nodes.push(walker.currentNode);
@@ -44,7 +44,7 @@
    animate(img,[{opacity:0,clipPath:'inset(18% 0 24% 0)',transform:'translateY(65px) scale(1.065)'},{opacity:1,clipPath:'inset(0% 0 0% 0)',transform:'translateY(0px) scale(1)'}],{duration:1250,delay:delay+260+Math.min(i*55,360),easing:'cubic-bezier(.18,.8,.16,1)',fill:'backwards'});
   });
  }
- function transition(from,to,direction){
+ function transition(from,to,direction,kind='default'){
   if(from===to)return;
   transitionToken++;const token=transitionToken;
   animations.forEach(a=>a.cancel());animations=[];transitionTimers.forEach(clearTimeout);transitionTimers=[];
@@ -52,6 +52,15 @@
   clearHover();
   if(reduced.matches){to.style.zIndex='2';return;}
   from.classList.add('transitioning');from.style.zIndex='1';to.style.zIndex='3';
+  if(kind==='split'){
+   to.dataset.entryTransition='center-open';
+   animate(from,[{opacity:1},{opacity:.5}],{duration:1100,easing:'ease',fill:'both'});
+   animate(to,[{clipPath:'inset(0 50% 0 50%)'},{clipPath:'inset(0 0% 0 0%)'}],{duration:1150,easing:'cubic-bezier(.76,0,.18,1)',fill:'both'});
+   const stage=to.querySelector('.stage');
+   if(stage)[...stage.children].filter(el=>!el.matches('.viewport-backdrop')).forEach((el,i)=>animate(el,[{opacity:0,transform:'translate3d(0,90px,0)'},{opacity:1,transform:'translate3d(0,0,0)'}],{duration:950,delay:420+Math.min(i*60,240),easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'}));
+   transitionTimers.push(setTimeout(()=>{if(token!==transitionToken)return;from.classList.remove('transitioning');from.style.zIndex='';to.style.zIndex='2';from.getAnimations().forEach(a=>a.cancel());to.getAnimations().forEach(a=>a.cancel());},1660));
+   return;
+  }
   animate(from,[{transform:'translateY(0%) scale(1)',opacity:1,filter:'brightness(1)'},{transform:`translateY(${-direction*24}%) scale(.94)`,opacity:.55,filter:'brightness(.65)'}],{duration:1180,easing:'cubic-bezier(.76,0,.2,1)',fill:'both'});
   animate(to,[{transform:`translateY(${direction*102}%)`,clipPath:direction>0?'inset(0 0 5% 0)':'inset(5% 0 0 0)'},{transform:'translateY(0%)',clipPath:'inset(0 0 0% 0)'}],{duration:1280,easing:'cubic-bezier(.76,0,.18,1)',fill:'both'});
   reveal(to,360);

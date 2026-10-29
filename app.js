@@ -26,17 +26,18 @@ function videoTile(n){const num=String(n).padStart(2,'0'),b=document.createEleme
 [9,10,11].forEach(n=>$('#motion-top').append(videoTile(n)));[1,2,3,4].forEach(n=>$('#motion-left').append(videoTile(n)));[5,6,7,8].forEach(n=>$('#motion-right').append(videoTile(n)));
 panels.forEach((p,i)=>{const b=document.createElement('button');b.dataset.page=i;b.setAttribute('aria-label',p.getAttribute('aria-label'));b.title=p.getAttribute('aria-label');$('.page-navigation').append(b);});
 function resize(){document.documentElement.style.setProperty('--stage-scale',String(Math.min(innerWidth/1600,innerHeight/900)));}
-function goTo(next,{history=true}={}){
+function goTo(next,{history=true,entry=false}={}){
  next=Number.isFinite(next)?Math.max(0,Math.min(panels.length-1,next)):0;
  const previous=page;page=next;lockedUntil=performance.now()+(reduced.matches?50:1450);
  if(!window.PortfolioMotion)$('#track').style.transform=`translate3d(-${page*100}vw,0,0)`;
  panels.forEach((p,i)=>{p.classList.toggle('active',i===page);p.inert=i!==page;if(i!==page)p.querySelectorAll('video').forEach(v=>v.pause());});
- window.PortfolioMotion?.transition(panels[previous],panels[page],page>=previous?1:-1);
+ window.PortfolioMotion?.transition(panels[previous],panels[page],page>=previous?1:-1,entry?'split':'default');
+ if(entry){panels[page].tabIndex=-1;panels[page].focus({preventScroll:true});}
  document.querySelectorAll('.page-navigation button').forEach((b,i)=>{if(i===page)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
  $('.page-count').innerHTML=`${String(page+1).padStart(2,'0')} <i>/</i> ${String(panels.length).padStart(2,'0')}`;$('#previous-page').disabled=page===0;$('#next-page').disabled=page===panels.length-1;$('#page-announcement').textContent=`${panels[page].getAttribute('aria-label')}，第 ${page+1} 页，共 ${panels.length} 页`;
  if(history&&location.hash!==`#${page+1}`)window.history.pushState(null,'',`#${page+1}`);
 }
-document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goTo(Number(b.dataset.page))));$('#previous-page').addEventListener('click',()=>goTo(page-1));$('#next-page').addEventListener('click',()=>goTo(page+1));
+document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>goTo(Number(b.dataset.page),{entry:b.hasAttribute('data-project-entry')})));$('#previous-page').addEventListener('click',()=>goTo(page-1));$('#next-page').addEventListener('click',()=>goTo(page+1));
 const lightbox=$('#lightbox');document.querySelectorAll('.image-view').forEach(b=>b.addEventListener('click',()=>{returnFocus=b;const img=document.createElement('img');img.src=b.dataset.image;img.alt=b.querySelector('img').alt;img.draggable=false;$('.lightbox-stage').replaceChildren(img);$('#lightbox-caption').textContent=img.alt;lightbox.showModal();$('.lightbox-close').focus();}));$('.lightbox-close').addEventListener('click',()=>lightbox.close());lightbox.addEventListener('click',e=>{if(e.target===lightbox)lightbox.close();});lightbox.addEventListener('close',()=>{$('.lightbox-stage').replaceChildren();returnFocus?.focus();});
 window.addEventListener('keydown',e=>{if(document.querySelector('dialog[open]')||e.target.closest('video,input,textarea,summary,.gx-bio-scroll'))return;const keys={ArrowRight:1,ArrowDown:1,PageDown:1,ArrowLeft:-1,ArrowUp:-1,PageUp:-1};if(keys[e.key]&&!(mobile.matches&&['ArrowDown','ArrowUp'].includes(e.key))){e.preventDefault();goTo(page+keys[e.key]);}if(e.key==='Home'){e.preventDefault();goTo(0);}if(e.key==='End'){e.preventDefault();goTo(panels.length-1);}});
 let wheelSum=0,wheelAt=0;window.addEventListener('wheel',e=>{if(mobile.matches||document.querySelector('dialog[open]')||e.ctrlKey||e.target.closest('video,.gx-bio-scroll,.gx-tone-track,.gx-subnav,.gx-shot-production'))return;e.preventDefault();const now=performance.now();if(now<lockedUntil)return;if(now-wheelAt>180)wheelSum=0;wheelAt=now;wheelSum+=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:e.deltaY;if(Math.abs(wheelSum)>70){goTo(page+Math.sign(wheelSum));wheelSum=0;}},{passive:false});
