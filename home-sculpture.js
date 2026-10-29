@@ -2,6 +2,7 @@ import * as THREE from './assets/vendor/three/three.module.min.js';
 import {GLTFLoader} from './assets/vendor/three/GLTFLoader.js';
 
 export async function mountSculpture(host,folder,panel){
+ panel=folder.closest('.persistent-archive')||panel;
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
  const renderer=new THREE.WebGLRenderer({alpha:true,antialias:true,powerPreference:'low-power'});
  renderer.setPixelRatio(Math.min(devicePixelRatio||1,1.5));renderer.setClearColor(0,0);renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.55;

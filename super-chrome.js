@@ -306,7 +306,7 @@ const solvePoisson = (mask, width, height) => {
 const processShape = source => {
   const width = source.width;
   const height = source.height;
-  const fit = WORKING_SIZE / Math.min(width, height);
+  const fit = Math.min(WORKING_SIZE / Math.min(width, height), 2048 / Math.max(width, height));
   const workW = Math.max(2, Math.round(width * fit));
   const workH = Math.max(2, Math.round(height * fit));
 
@@ -366,38 +366,88 @@ const compile = (gl, type, source) => {
 };
 
 
- const reduced=matchMedia('(prefers-reduced-motion:reduce)');
- const shapeCache=new Map();
- async function mount(el){
-  const style=getComputedStyle(el),key=el.dataset.chrome+'|'+style.fontFamily+'|'+style.fontWeight;
-  let prepared=shapeCache.get(key);
-  if(!prepared){const source=await drawTextSource(el.dataset.chrome,style.fontFamily,style.fontWeight);if(!source)return;prepared={shape:processShape(source),aspect:source.width/source.height};shapeCache.set(key,prepared);}
-  const {shape,aspect}=prepared,canvas=document.createElement('canvas'),gl=canvas.getContext('webgl2',{alpha:true,antialias:true,premultipliedAlpha:true});if(!gl)return;
-  const vertex=compile(gl,gl.VERTEX_SHADER,VERTEX),fragment=compile(gl,gl.FRAGMENT_SHADER,FRAGMENT);if(!vertex||!fragment)return;
-  const program=gl.createProgram();gl.attachShader(program,vertex);gl.attachShader(program,fragment);gl.linkProgram(program);gl.deleteShader(vertex);gl.deleteShader(fragment);if(!gl.getProgramParameter(program,gl.LINK_STATUS))return;
-  gl.useProgram(program);const u={};for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){const info=gl.getActiveUniform(program,i);u[info.name]=gl.getUniformLocation(program,info.name);}
-  const vao=gl.createVertexArray(),buffer=gl.createBuffer();gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
-  const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,shape.width,shape.height,0,gl.RGBA,gl.UNSIGNED_BYTE,shape.data);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.uniform1i(u.u_image,0);
-  canvas.setAttribute('aria-hidden','true');el.append(canvas);const panel=el.closest('.panel'),folder=el.closest('.project-folder'),red=el.dataset.chromeTone==='red';let raf=0,last=0,time=0,tiltX=0,tiltY=0,ready=false,disposed=false,visible=true;
-  const active=()=>!disposed&&visible&&panel.classList.contains('active')&&!document.hidden&&!document.querySelector('dialog[open]')&&(!folder||folder.classList.contains('is-open'));
-  function draw(now){raf=0;if(!active())return;if(last&&now-last<33){raf=requestAnimationFrame(draw);return;}if(last)time+=Math.min(now-last,50)*.00055;last=now;const rect=el.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5),w=Math.max(2,Math.round(rect.width*dpr)),h=Math.max(2,Math.round(rect.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
-   gl.viewport(0,0,w,h);gl.useProgram(program);gl.uniform2f(u.u_resolution,w,h);gl.uniform1f(u.u_imageAspect,aspect);gl.uniform1f(u.u_scale,.99);gl.uniform1f(u.u_rotation,0);gl.uniform1f(u.u_time,time);gl.uniform4f(u.u_colorBack,0,0,0,0);gl.uniform4f(u.u_colorTint,1,red?.38:1,red?.31:1,red?.68:0);gl.uniform1f(u.u_softness,.15);gl.uniform1f(u.u_repetition,red?1.9:2.3);gl.uniform1f(u.u_shiftRed,red?.7:1.8);gl.uniform1f(u.u_shiftBlue,red?.4:1.8);gl.uniform1f(u.u_distortion,.1);gl.uniform1f(u.u_contour,.65);gl.uniform1f(u.u_angle,70);gl.uniform2f(u.u_tilt,tiltX,tiltY);gl.uniform1f(u.u_reveal,1);gl.uniform1f(u.u_light,0);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.bindVertexArray(vao);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!ready){ready=true;el.classList.add('chrome-ready');}if(!reduced.matches)raf=requestAnimationFrame(draw);
-  }
-  function sync(){cancelAnimationFrame(raf);raf=0;last=0;if(active())raf=requestAnimationFrame(draw);}
-  const observers=[];const observe=(target,options)=>{const observer=new MutationObserver(sync);observer.observe(target,options);observers.push(observer)};
-  observe(panel,{attributes:true,attributeFilter:['class']});if(folder)observe(folder,{attributes:true,attributeFilter:['class']});document.querySelectorAll('dialog').forEach(d=>observe(d,{attributes:true,attributeFilter:['open']}));
-  const io=new IntersectionObserver(es=>{visible=es[0].isIntersecting;sync()});io.observe(el);
-  const move=e=>{const r=el.getBoundingClientRect();tiltX=Math.max(-1,Math.min(1,(e.clientX-r.left)/r.width*2-1))*.3;tiltY=Math.max(-1,Math.min(1,(e.clientY-r.top)/r.height*2-1))*.3;},leave=()=>{tiltX=tiltY=0;};
-  document.addEventListener('visibilitychange',sync);window.addEventListener('resize',sync);reduced.addEventListener('change',sync);panel.addEventListener('pointermove',move);panel.addEventListener('pointerleave',leave);
-  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);el.classList.remove('chrome-ready');});sync();
-  return ()=>{disposed=true;cancelAnimationFrame(raf);observers.forEach(o=>o.disconnect());io.disconnect();document.removeEventListener('visibilitychange',sync);window.removeEventListener('resize',sync);reduced.removeEventListener('change',sync);panel.removeEventListener('pointermove',move);panel.removeEventListener('pointerleave',leave);gl.deleteTexture(tex);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);gl.getExtension('WEBGL_lose_context')?.loseContext();canvas.remove();el.classList.remove('chrome-ready');};
+
+// All lettering shares one GPU context. Each visible label receives a 2D snapshot;
+// this keeps long resume pages below the browser's WebGL-context limit.
+const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+const surface=document.createElement('canvas');
+const gl=surface.getContext('webgl2',{alpha:true,antialias:false,premultipliedAlpha:true});
+if(!gl)return;
+const vertex=compile(gl,gl.VERTEX_SHADER,VERTEX),fragment=compile(gl,gl.FRAGMENT_SHADER,FRAGMENT);
+if(!vertex||!fragment)return;
+const program=gl.createProgram();gl.attachShader(program,vertex);gl.attachShader(program,fragment);gl.linkProgram(program);gl.deleteShader(vertex);gl.deleteShader(fragment);
+if(!gl.getProgramParameter(program,gl.LINK_STATUS))return;
+gl.useProgram(program);
+const u={};for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){const info=gl.getActiveUniform(program,i);u[info.name]=gl.getUniformLocation(program,info.name);}
+const vao=gl.createVertexArray(),buffer=gl.createBuffer();gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
+gl.uniform1i(u.u_image,0);
+
+async function wrappedSource(el,style){
+ const size=parseFloat(style.fontSize),scale=2,font=`${style.fontWeight} ${size*scale}px ${style.fontFamily}`;
+ await document.fonts?.load(font,el.dataset.chrome);
+ const w=el.clientWidth,h=el.clientHeight;if(!w||!h)return null;
+ const canvas=document.createElement('canvas');canvas.width=Math.ceil(w*scale);canvas.height=Math.ceil(h*scale);
+ const ctx=canvas.getContext('2d');ctx.font=font;ctx.fillStyle='#000';ctx.textBaseline='alphabetic';
+ const left=parseFloat(style.paddingLeft)||0,right=parseFloat(style.paddingRight)||0,top=parseFloat(style.paddingTop)||0;
+ const width=(w-left-right)*scale,lines=[];
+ // Keep explicit workflow line breaks and wrap long Chinese resume copy.
+ const br=el.querySelector('br'),text=br&&getComputedStyle(br).display==='none'?el.dataset.chrome.replaceAll('\n',''):el.dataset.chrome;
+ for(const paragraph of text.split('\n')){
+  let line='';for(const char of paragraph){if(line&&ctx.measureText(line+char).width>width){lines.push(line);line=char;}else line+=char;}lines.push(line);
  }
- // Release inactive-page contexts so the home lettering and the 3D model never exhaust WebGL slots.
- document.querySelectorAll('.sm-design,.gx-super-mapping,.home-weaving').forEach(panel=>{
-  const mounted=new Map();let epoch=0;
-  async function boot(){const token=++epoch;if(!panel.classList.contains('active')){mounted.forEach(dispose=>dispose?.());mounted.clear();return;}
-   for(const el of panel.querySelectorAll('[data-chrome]')){if(token!==epoch)return;if(mounted.has(el))continue;mounted.set(el,null);try{const dispose=await mount(el);if(token!==epoch){dispose?.();mounted.delete(el);return;}mounted.set(el,dispose);}catch{mounted.delete(el);}}
-  }
-  new MutationObserver(boot).observe(panel,{attributes:true,attributeFilter:['class']});boot();
- });
+ const metrics=ctx.measureText('国Mg'),ascent=metrics.fontBoundingBoxAscent||size*scale*.88,descent=metrics.fontBoundingBoxDescent||size*scale*.22;
+ const lineHeight=(parseFloat(style.lineHeight)||size*1.2)*scale;
+ lines.forEach((line,i)=>{const length=ctx.measureText(line).width;const x=left*scale+(style.textAlign==='center'?(width-length)/2:style.textAlign==='right'?width-length:0);ctx.fillText(line,x,top*scale+i*lineHeight+(lineHeight-ascent-descent)/2+ascent);});
+ return canvas;
+}
+
+const records=[...document.querySelectorAll('[data-chrome]')].map(el=>({el,scope:el.closest('.panel,.persistent-archive'),folder:el.closest('.project-folder'),visible:false,pending:false,texture:null,canvas:null,key:'',dirty:true,tiltX:0,tiltY:0}));
+let raf=0,last=0,time=0,lost=false;
+const active=r=>r.visible&&r.scope?.classList.contains('active')&&(!r.folder||r.folder.classList.contains('is-open'));
+function wake(){if(!raf&&!lost&&!document.hidden)raf=requestAnimationFrame(draw);}
+function invalidate(){records.forEach(r=>r.dirty=true);wake();}
+async function prepare(r,key,style){
+ if(r.pending)return;r.pending=true;
+ try{
+  const source=r.el.dataset.chromeWrap?await wrappedSource(r.el,style):await drawTextSource(r.el.dataset.chrome,style.fontFamily,style.fontWeight);
+  if(!source||lost)return;
+  const shape=processShape(source);
+  if(r.texture)gl.deleteTexture(r.texture);
+  r.texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,r.texture);
+  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,shape.width,shape.height,0,gl.RGBA,gl.UNSIGNED_BYTE,shape.data);
+  gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
+  r.aspect=source.width/source.height;r.key=key;r.dirty=true;
+  if(!r.canvas){r.canvas=document.createElement('canvas');r.canvas.setAttribute('aria-hidden','true');r.ctx=r.canvas.getContext('2d');r.el.append(r.canvas);}
+ }catch{r.el.classList.remove('chrome-ready');}finally{r.pending=false;wake();}
+}
+function draw(now){
+ raf=0;if(lost||document.hidden||document.querySelector('dialog[open]'))return;
+ if(last&&now-last<40){wake();return;}if(last)time+=Math.min(now-last,60)*.00055;last=now;
+ let animating=false;
+ for(const r of records){
+  if(!active(r))continue;
+  const rect=r.el.getBoundingClientRect();if(rect.bottom<=0||rect.top>=innerHeight||!rect.width||!rect.height)continue;
+  const style=getComputedStyle(r.el),key=[r.el.dataset.chrome,style.fontFamily,style.fontWeight,style.fontSize,r.el.clientWidth,r.el.clientHeight].join('|');
+  if(r.key!==key){prepare(r,key,style);continue;}
+  animating=true;if(reduced.matches&&!r.dirty)continue;
+  const dpr=Math.min(devicePixelRatio||1,1.5),w=Math.max(2,Math.round(rect.width*dpr)),h=Math.max(2,Math.round(rect.height*dpr)),red=r.el.dataset.chromeTone==='red';
+  if(surface.width!==w||surface.height!==h){surface.width=w;surface.height=h;}
+  if(r.canvas.width!==w||r.canvas.height!==h){r.canvas.width=w;r.canvas.height=h;}
+  gl.viewport(0,0,w,h);gl.useProgram(program);gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,r.texture);
+  gl.uniform2f(u.u_resolution,w,h);gl.uniform1f(u.u_imageAspect,r.aspect);gl.uniform1f(u.u_scale,r.el.dataset.chromeWrap?1:.99);gl.uniform1f(u.u_rotation,0);gl.uniform1f(u.u_time,reduced.matches?0:time);
+  gl.uniform4f(u.u_colorBack,0,0,0,0);gl.uniform4f(u.u_colorTint,1,red?.38:1,red?.31:1,red?.68:0);gl.uniform1f(u.u_softness,.15);gl.uniform1f(u.u_repetition,red?1.9:2.3);gl.uniform1f(u.u_shiftRed,red?.7:1.8);gl.uniform1f(u.u_shiftBlue,red?.4:1.8);gl.uniform1f(u.u_distortion,.1);gl.uniform1f(u.u_contour,.65);gl.uniform1f(u.u_angle,70);gl.uniform2f(u.u_tilt,r.tiltX,r.tiltY);gl.uniform1f(u.u_reveal,1);gl.uniform1f(u.u_light,0);
+  gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.bindVertexArray(vao);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);
+  r.ctx.clearRect(0,0,w,h);r.ctx.drawImage(surface,0,0);r.el.classList.add('chrome-ready');r.dirty=false;
+ }
+ if(animating&&!reduced.matches)wake();
+}
+const io=new IntersectionObserver(entries=>{for(const e of entries){const r=records.find(r=>r.el===e.target);r.visible=e.isIntersecting;r.dirty=true;}wake();});
+const ro=new ResizeObserver(invalidate);
+records.forEach(r=>{io.observe(r.el);ro.observe(r.el);r.el.addEventListener('pointermove',e=>{const b=r.el.getBoundingClientRect();r.tiltX=((e.clientX-b.left)/b.width*2-1)*.3;r.tiltY=((e.clientY-b.top)/b.height*2-1)*.3;r.dirty=true;wake();});r.el.addEventListener('pointerleave',()=>{r.tiltX=r.tiltY=0;r.dirty=true;wake();});});
+const scopes=new Set(records.flatMap(r=>[r.scope,r.folder]).filter(Boolean));
+scopes.forEach(scope=>new MutationObserver(invalidate).observe(scope,{attributes:true,attributeFilter:['class']}));
+document.querySelectorAll('dialog').forEach(d=>new MutationObserver(invalidate).observe(d,{attributes:true,attributeFilter:['open']}));
+document.addEventListener('visibilitychange',()=>{last=0;invalidate();});window.addEventListener('resize',invalidate);reduced.addEventListener('change',invalidate);
+document.fonts?.ready.then(invalidate);
+surface.addEventListener('webglcontextlost',()=>{lost=true;cancelAnimationFrame(raf);records.forEach(r=>r.el.classList.remove('chrome-ready'));});wake();
 })();
