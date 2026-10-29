@@ -233,7 +233,7 @@ void main() {
 }`;
 
 const drawTextSource = async (text, fontFamily, fontWeight) => {
-  const size = 320;
+  const size = text.length>30 ? 96 : text.length>16 ? 160 : 320;
   const font = `${fontWeight} ${size}px ${fontFamily}`;
   try {
     await document.fonts?.load(font, text);
@@ -367,22 +367,37 @@ const compile = (gl, type, source) => {
 
 
  const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+ const shapeCache=new Map();
  async function mount(el){
-  const source=await drawTextSource(el.dataset.chrome,'"Microsoft YaHei", Arial, sans-serif',800);if(!source)return;
-  const shape=processShape(source),canvas=document.createElement('canvas'),gl=canvas.getContext('webgl2',{alpha:true,antialias:true,premultipliedAlpha:true});if(!gl)return;
+  const style=getComputedStyle(el),key=el.dataset.chrome+'|'+style.fontFamily+'|'+style.fontWeight;
+  let prepared=shapeCache.get(key);
+  if(!prepared){const source=await drawTextSource(el.dataset.chrome,style.fontFamily,style.fontWeight);if(!source)return;prepared={shape:processShape(source),aspect:source.width/source.height};shapeCache.set(key,prepared);}
+  const {shape,aspect}=prepared,canvas=document.createElement('canvas'),gl=canvas.getContext('webgl2',{alpha:true,antialias:true,premultipliedAlpha:true});if(!gl)return;
   const vertex=compile(gl,gl.VERTEX_SHADER,VERTEX),fragment=compile(gl,gl.FRAGMENT_SHADER,FRAGMENT);if(!vertex||!fragment)return;
   const program=gl.createProgram();gl.attachShader(program,vertex);gl.attachShader(program,fragment);gl.linkProgram(program);gl.deleteShader(vertex);gl.deleteShader(fragment);if(!gl.getProgramParameter(program,gl.LINK_STATUS))return;
   gl.useProgram(program);const u={};for(let i=0;i<gl.getProgramParameter(program,gl.ACTIVE_UNIFORMS);i++){const info=gl.getActiveUniform(program,i);u[info.name]=gl.getUniformLocation(program,info.name);}
   const vao=gl.createVertexArray(),buffer=gl.createBuffer();gl.bindVertexArray(vao);gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);gl.enableVertexAttribArray(0);gl.vertexAttribPointer(0,2,gl.FLOAT,false,0,0);
   const tex=gl.createTexture();gl.activeTexture(gl.TEXTURE0);gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,shape.width,shape.height,0,gl.RGBA,gl.UNSIGNED_BYTE,shape.data);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.uniform1i(u.u_image,0);
-  canvas.setAttribute('aria-hidden','true');el.append(canvas);const panel=el.closest('.panel');let raf=0,last=0,time=0,tiltX=0,tiltY=0,ready=false;
-  function draw(now){raf=0;if(last&&now-last<33){raf=requestAnimationFrame(draw);return;}if(last)time+=Math.min(now-last,50)*.00055;last=now;const rect=el.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5),w=Math.max(2,Math.round(rect.width*dpr)),h=Math.max(2,Math.round(rect.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}gl.viewport(0,0,w,h);gl.useProgram(program);gl.uniform2f(u.u_resolution,w,h);gl.uniform1f(u.u_imageAspect,source.width/source.height);gl.uniform1f(u.u_scale,.96);gl.uniform1f(u.u_rotation,0);gl.uniform1f(u.u_time,time);gl.uniform4f(u.u_colorBack,0,0,0,0);gl.uniform4f(u.u_colorTint,1,1,1,0);gl.uniform1f(u.u_softness,.15);gl.uniform1f(u.u_repetition,2.3);gl.uniform1f(u.u_shiftRed,1.8);gl.uniform1f(u.u_shiftBlue,1.8);gl.uniform1f(u.u_distortion,.1);gl.uniform1f(u.u_contour,.65);gl.uniform1f(u.u_angle,70);gl.uniform2f(u.u_tilt,tiltX,tiltY);gl.uniform1f(u.u_reveal,1);gl.uniform1f(u.u_light,0);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.bindVertexArray(vao);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!ready){ready=true;el.classList.add('chrome-ready');}if(panel.classList.contains('active')&&!document.hidden&&!document.querySelector('dialog[open]')&&!reduced.matches)raf=requestAnimationFrame(draw);}
-  function sync(){cancelAnimationFrame(raf);raf=0;last=0;if(panel.classList.contains('active')&&!document.hidden&&!document.querySelector('dialog[open]'))raf=requestAnimationFrame(draw);}
-  new MutationObserver(sync).observe(panel,{attributes:true,attributeFilter:['class']});document.querySelectorAll('dialog').forEach(d=>new MutationObserver(sync).observe(d,{attributes:true,attributeFilter:['open']}));document.addEventListener('visibilitychange',sync);window.addEventListener('resize',sync);reduced.addEventListener('change',sync);panel.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();tiltX=Math.max(-1,Math.min(1,(e.clientX-r.left)/r.width*2-1))*.3;tiltY=Math.max(-1,Math.min(1,(e.clientY-r.top)/r.height*2-1))*.3;});panel.addEventListener('pointerleave',()=>{tiltX=tiltY=0;});canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);el.classList.remove('chrome-ready');});canvas.addEventListener('webglcontextrestored',()=>{canvas.remove();mount(el).catch(()=>{});});sync();
+  canvas.setAttribute('aria-hidden','true');el.append(canvas);const panel=el.closest('.panel'),folder=el.closest('.project-folder'),red=el.dataset.chromeTone==='red';let raf=0,last=0,time=0,tiltX=0,tiltY=0,ready=false,disposed=false,visible=true;
+  const active=()=>!disposed&&visible&&panel.classList.contains('active')&&!document.hidden&&!document.querySelector('dialog[open]')&&(!folder||folder.classList.contains('is-open'));
+  function draw(now){raf=0;if(!active())return;if(last&&now-last<33){raf=requestAnimationFrame(draw);return;}if(last)time+=Math.min(now-last,50)*.00055;last=now;const rect=el.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5),w=Math.max(2,Math.round(rect.width*dpr)),h=Math.max(2,Math.round(rect.height*dpr));if(canvas.width!==w||canvas.height!==h){canvas.width=w;canvas.height=h;}
+   gl.viewport(0,0,w,h);gl.useProgram(program);gl.uniform2f(u.u_resolution,w,h);gl.uniform1f(u.u_imageAspect,aspect);gl.uniform1f(u.u_scale,.99);gl.uniform1f(u.u_rotation,0);gl.uniform1f(u.u_time,time);gl.uniform4f(u.u_colorBack,0,0,0,0);gl.uniform4f(u.u_colorTint,1,red?.38:1,red?.31:1,red?.68:0);gl.uniform1f(u.u_softness,.15);gl.uniform1f(u.u_repetition,red?1.9:2.3);gl.uniform1f(u.u_shiftRed,red?.7:1.8);gl.uniform1f(u.u_shiftBlue,red?.4:1.8);gl.uniform1f(u.u_distortion,.1);gl.uniform1f(u.u_contour,.65);gl.uniform1f(u.u_angle,70);gl.uniform2f(u.u_tilt,tiltX,tiltY);gl.uniform1f(u.u_reveal,1);gl.uniform1f(u.u_light,0);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.bindVertexArray(vao);gl.drawArrays(gl.TRIANGLE_STRIP,0,4);if(!ready){ready=true;el.classList.add('chrome-ready');}if(!reduced.matches)raf=requestAnimationFrame(draw);
+  }
+  function sync(){cancelAnimationFrame(raf);raf=0;last=0;if(active())raf=requestAnimationFrame(draw);}
+  const observers=[];const observe=(target,options)=>{const observer=new MutationObserver(sync);observer.observe(target,options);observers.push(observer)};
+  observe(panel,{attributes:true,attributeFilter:['class']});if(folder)observe(folder,{attributes:true,attributeFilter:['class']});document.querySelectorAll('dialog').forEach(d=>observe(d,{attributes:true,attributeFilter:['open']}));
+  const io=new IntersectionObserver(es=>{visible=es[0].isIntersecting;sync()});io.observe(el);
+  const move=e=>{const r=el.getBoundingClientRect();tiltX=Math.max(-1,Math.min(1,(e.clientX-r.left)/r.width*2-1))*.3;tiltY=Math.max(-1,Math.min(1,(e.clientY-r.top)/r.height*2-1))*.3;},leave=()=>{tiltX=tiltY=0;};
+  document.addEventListener('visibilitychange',sync);window.addEventListener('resize',sync);reduced.addEventListener('change',sync);panel.addEventListener('pointermove',move);panel.addEventListener('pointerleave',leave);
+  canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();cancelAnimationFrame(raf);el.classList.remove('chrome-ready');});sync();
+  return ()=>{disposed=true;cancelAnimationFrame(raf);observers.forEach(o=>o.disconnect());io.disconnect();document.removeEventListener('visibilitychange',sync);window.removeEventListener('resize',sync);reduced.removeEventListener('change',sync);panel.removeEventListener('pointermove',move);panel.removeEventListener('pointerleave',leave);gl.deleteTexture(tex);gl.deleteBuffer(buffer);gl.deleteVertexArray(vao);gl.deleteProgram(program);gl.getExtension('WEBGL_lose_context')?.loseContext();canvas.remove();el.classList.remove('chrome-ready');};
  }
- document.querySelectorAll('.sm-design,.gx-super-mapping').forEach(panel=>{
- const boot=()=>{if(!panel.classList.contains('active'))return;panel.querySelectorAll('[data-chrome]').forEach(el=>{if(el.dataset.chromeMounted)return;el.dataset.chromeMounted='true';mount(el).catch(()=>{});});};
- new MutationObserver(boot).observe(panel,{attributes:true,attributeFilter:['class']});boot();
+ // Release inactive-page contexts so the home lettering and the 3D model never exhaust WebGL slots.
+ document.querySelectorAll('.sm-design,.gx-super-mapping,.home-weaving').forEach(panel=>{
+  const mounted=new Map();let epoch=0;
+  async function boot(){const token=++epoch;if(!panel.classList.contains('active')){mounted.forEach(dispose=>dispose?.());mounted.clear();return;}
+   for(const el of panel.querySelectorAll('[data-chrome]')){if(token!==epoch)return;if(mounted.has(el))continue;mounted.set(el,null);try{const dispose=await mount(el);if(token!==epoch){dispose?.();mounted.delete(el);return;}mounted.set(el,dispose);}catch{mounted.delete(el);}}
+  }
+  new MutationObserver(boot).observe(panel,{attributes:true,attributeFilter:['class']});boot();
  });
-
 })();

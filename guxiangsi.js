@@ -29,11 +29,11 @@
  const toc=document.querySelector('.contents-list li:nth-child(3)');toc.innerHTML='<button data-page="8"><span>古相思曲</span><small>ECHOES OF ANCIENT YEARNING</small></button>';
  document.querySelectorAll('[data-carousel]').forEach(car=>{let at=0;const figures=[...car.querySelectorAll('figure')];car.querySelectorAll('[data-step]').forEach(b=>b.addEventListener('click',()=>{at=(at+Number(b.dataset.step)+figures.length)%figures.length;figures.forEach((f,i)=>f.hidden=i!==at);car.querySelector('[aria-live]').textContent=`0${at+1} / 0${figures.length}`;}));});
  const track=document.querySelector('.gx-tone-track'),tabs=[...document.querySelectorAll('[data-tone]')];let tone=0;
- function select(i){tone=Math.max(0,Math.min(4,i));track.scrollTo({left:tone*track.clientWidth,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});sync();}
+ function select(i){tone=Math.max(0,Math.min(4,i));if(track.portfolioHorizontal)track.portfolioHorizontal.go(tone);else track.scrollTo({left:tone*track.clientWidth,behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'instant':'smooth'});sync();}
  function sync(){tabs.forEach((b,i)=>b.setAttribute('aria-selected',String(i===tone)));document.querySelector('#tone-prev').disabled=tone===0;document.querySelector('#tone-next').disabled=tone===4;}
  tabs.forEach((b,i)=>b.addEventListener('click',()=>select(i)));document.querySelector('#tone-prev').addEventListener('click',()=>select(tone-1));document.querySelector('#tone-next').addEventListener('click',()=>select(tone+1));
  track.addEventListener('scroll',()=>{tone=Math.round(track.scrollLeft/track.clientWidth);sync();},{passive:true});
  document.querySelector('.gx-tones').addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();e.stopPropagation();select(tone+(e.key==='ArrowRight'?1:-1));}});
  track.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.stopPropagation();return;}if(!matchMedia('(max-width:800px)').matches){e.preventDefault();e.stopPropagation();track.scrollLeft+=e.deltaY;}},{passive:false});
- window.addEventListener('resize',()=>track.scrollTo({left:tone*track.clientWidth,behavior:'instant'}));sync();
+ window.addEventListener('resize',()=>track.portfolioHorizontal?track.portfolioHorizontal.resize(tone):track.scrollTo({left:tone*track.clientWidth,behavior:'instant'}));sync();
 })();
