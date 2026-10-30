@@ -31,8 +31,7 @@
  document.addEventListener('ended',event=>{if(event.target.tagName==='VIDEO')queueMicrotask(syncMusic);},true);
  document.addEventListener('visibilitychange',syncMusic);
  toggle.addEventListener('click',()=>{enabled=!enabled;unlocked=true;toggle.setAttribute('aria-pressed',String(enabled));toggle.setAttribute('aria-label',enabled?'关闭背景音乐':'开启背景音乐');toggle.lastElementChild.textContent=enabled?'音乐开启':'音乐关闭';syncMusic();});
- document.addEventListener('click',event=>{
-  if(!event.target.closest('.project-folder-trigger,.sm-folder-toggle'))return;
+ document.addEventListener('click',()=>{
   click.currentTime=0;click.play().catch(()=>{});
  });
 })();
