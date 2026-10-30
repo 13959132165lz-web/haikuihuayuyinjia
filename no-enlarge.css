@@ -1,0 +1,5 @@
+/* Image and video tiles remain at their authored size on hover. */
+.image-view,.gx-visual{cursor:default}
+.image-view:hover img,.character-art:hover img,.scene-cell:hover img,.gx-scene-cover:hover img,.video-tile:hover img{transform:none!important}
+.sm-folder.is-open .sm-folder-photo:hover,.sm-folder-photo:focus-visible{transform:translate(calc(var(--fan)*var(--spread)),calc(var(--lift) - var(--slot)*5px - 22px)) rotate(calc(var(--fan)*7deg));}
+.image-view:disabled,.gx-visual:disabled{opacity:1!important;color:inherit}
