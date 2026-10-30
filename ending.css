@@ -1,0 +1,13 @@
+.ending{background:#fff;color:#a51c23}.ending::before{display:none}.ending .stage{isolation:isolate}
+.ending-marks{position:absolute;inset:0;pointer-events:none}.ending-marks i{position:absolute;width:6px;height:6px;border-radius:50%;background:#151515;transform:translate(-50%,-50%)}
+.ending-art{position:absolute;left:54%;top:31%;width:146px;height:220px;margin:0;z-index:0}.ending-art img{width:100%;height:100%;object-fit:cover;display:block}
+.ending-heading{position:absolute;left:24%;right:24%;top:35%;z-index:2;text-align:center;margin:0!important;filter:none;display:flex;flex-direction:column;align-items:center;gap:8px}
+.ending-heading .chrome-text{font:800 62px/1.3 'Microsoft YaHei',sans-serif;letter-spacing:0}.ending-heading .chrome-text+span{font:800 45px/1.3 Arial,sans-serif}
+.ending-signature{position:absolute;left:39%;top:66%;display:flex;align-items:flex-start;flex-direction:column;gap:5px}.ending-signature .chrome-text{font:800 18px/1.5 'Microsoft YaHei',sans-serif;letter-spacing:0}.ending-signature .chrome-text:nth-child(2){font:800 12px/1.5 Arial,sans-serif;margin-bottom:15px}.ending-signature .chrome-text:last-child{font:800 11px/1.5 Arial,sans-serif}
+.ending [data-chrome-tone=red]{background-image:linear-gradient(115deg,#891217,#ff806d 22%,#f7b7a0 35%,#b7242b 44%,#e95348 67%,#d27364 79%,#a51c23);background-clip:text;-webkit-background-clip:text;color:transparent}.ending .chrome-ready{background:none}
+body:has(.ending.active) .navigation,body:has(.ending.active) .page-controls{color:#852127}body:has(.ending.active) .page-controls{background:transparent}
+@media(max-width:800px){.ending>.stage{height:100dvh;min-height:700px;padding:0}.ending-heading{left:5%;right:5%;top:36%}.ending-heading .chrome-text{font-size:40px}.ending-heading .chrome-text+span{font-size:29px}.ending-art{left:53%;top:29%;width:110px;height:165px}.ending-signature{left:21%;top:65%}.ending-marks i{width:4px;height:4px}}
+.ending-art{left:61%;top:49%;width:120px;height:180px}
+body:has(.panel.ending.active) .navigation,body:has(.panel.ending.active) .page-controls{color:#852127}
+body:has(.ending.active) .project-folder-face{color:#663b3e}body:has(.ending.active) .project-folder-face small{color:#856369}
+@media(max-width:800px){.ending-art{left:62%;top:52%;width:87px;height:130px}}

@@ -1,6 +1,7 @@
 (() => {
  'use strict';
- const cover=document.querySelector('.cover'),workflow=document.querySelector('.workflow');
+ const cover=document.querySelector('.cover'),workflow=document.querySelector('.workflow'),ending=document.querySelector('.ending');
+ const archivePages=[cover,workflow,ending];
  // Run after the older page builders, then renumber every existing navigation target.
  document.querySelector('.contents')?.remove();
  document.querySelectorAll('[data-page]').forEach(b=>{const old=Number(b.dataset.page);if(old>1)b.dataset.page=String(old-1);});
@@ -22,10 +23,10 @@
  // A viewport-level archive survives scrolling and the transition between the first two pages.
  const archive=document.createElement('aside');archive.className='persistent-archive home-weaving';archive.setAttribute('aria-label','项目快捷文件夹');
  const folder=document.querySelector('.project-folder');archive.append(folder);document.body.append(archive);
- function syncArchive(){const leaving=archive.classList.contains('departing')&&archive.parentElement.classList.contains('transitioning');const visible=cover.classList.contains('active')||workflow.classList.contains('active')||leaving;if(!leaving){document.body.append(archive);archive.classList.remove('departing');}archive.classList.toggle('active',visible);archive.inert=!visible||leaving;archive.setAttribute('aria-hidden',String(!visible));}
+ function syncArchive(){const leaving=archive.classList.contains('departing')&&archive.parentElement.classList.contains('transitioning');const visible=archivePages.some(p=>p.classList.contains('active'))||leaving;if(!leaving){document.body.append(archive);archive.classList.remove('departing');}archive.classList.toggle('active',visible);archive.inert=!visible||leaving;archive.setAttribute('aria-hidden',String(!visible));}
  // Nest the live folder in the outgoing panel so it shares the exact page animation.
- window.PortfolioArchive={transition(from,to){if([cover,workflow].includes(from)&&![cover,workflow].includes(to)){from.append(archive);archive.classList.add('departing');archive.classList.add('active');archive.inert=true;}else{archive.classList.remove('departing');document.body.append(archive);syncArchive();}}};
- [cover,workflow].forEach(p=>new MutationObserver(syncArchive).observe(p,{attributes:true,attributeFilter:['class']}));syncArchive();
+ window.PortfolioArchive={transition(from,to){if(archivePages.includes(from)&&!archivePages.includes(to)){from.append(archive);archive.classList.add('departing');archive.classList.add('active');archive.inert=true;}else{archive.classList.remove('departing');document.body.append(archive);syncArchive();}}};
+ archivePages.forEach(p=>new MutationObserver(syncArchive).observe(p,{attributes:true,attributeFilter:['class']}));syncArchive();
  const scroll=cover.querySelector('.home-scroll');let previous=scroll.scrollTop,armed=false,timer=0,lastAdvance=-Infinity;
  const bottom=()=>scroll.scrollHeight>scroll.clientHeight+20&&scroll.scrollTop>=scroll.scrollHeight-scroll.clientHeight-3;
  const active=()=>cover.classList.contains('active')&&!document.hidden&&!document.querySelector('dialog[open]');

@@ -12,7 +12,7 @@
  }
  // Split only display headings; long body copy keeps its natural line wrapping.
  document.querySelectorAll('h1,h2,h3').forEach(heading=>{
-  if(heading.closest('.home-weaving,.workflow-red')||heading.classList.contains('chrome-heading')||heading.classList.contains('tech-heading'))return;
+  if(heading.closest('.home-weaving,.workflow-red,.ending')||heading.classList.contains('chrome-heading')||heading.classList.contains('tech-heading'))return;
   heading.setAttribute('aria-label',heading.textContent.trim()||heading.querySelector('img')?.alt||'');
   const walker=document.createTreeWalker(heading,NodeFilter.SHOW_TEXT),nodes=[];
   while(walker.nextNode())nodes.push(walker.currentNode);
@@ -24,7 +24,7 @@
   }
  });
  function reveal(panel,delay=0){
-  if(reduced.matches||panel.matches('.home-weaving,.workflow-red'))return;
+  if(reduced.matches||panel.matches('.home-weaving,.workflow-red,.ending'))return;
   const onCurrentSlide=el=>{const slide=el.closest('.gx-subslide');return !slide||slide.classList.contains('gx-subactive')};
   [...panel.querySelectorAll('h1,h2,h3')].filter(onCurrentSlide).forEach((heading,j)=>{
    heading.querySelectorAll('.ink-char').forEach((char,i)=>{
