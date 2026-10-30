@@ -9,7 +9,9 @@
  });
  // Preserve playback and seeking while removing native fullscreen/PiP enlargement.
  document.querySelectorAll('video').forEach(video=>{
-  video.controlsList?.add('nofullscreen');
+  const controls=new Set((video.getAttribute('controlslist')||'').split(/\s+/).filter(Boolean));
+  controls.add('nofullscreen');
+  video.setAttribute('controlslist',[...controls].join(' '));
   video.disablePictureInPicture=true;
  });
 })();
