@@ -9,7 +9,7 @@
   for(const el of elements){
    if(el.matches('a[download]')){el.remove();continue;}
    el.draggable=false;el.style.webkitUserDrag='none';el.style.userSelect='none';el.style.webkitTouchCallout='none';
-   if(el.tagName==='VIDEO'){el.setAttribute('controlslist','nodownload noremoteplayback');el.disablePictureInPicture=true;el.disableRemotePlayback=true;}
+   if(el.tagName==='VIDEO'){el.setAttribute('controlslist','nodownload noremoteplayback nofullscreen');el.disablePictureInPicture=true;el.disableRemotePlayback=true;}
   }
  }
  protect(document);
