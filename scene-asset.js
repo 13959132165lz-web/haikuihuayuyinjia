@@ -23,7 +23,11 @@
       <div class="style-carousel-window" role="listbox" aria-label="选择场景图片"><div class="style-carousel-track">${cards}</div></div>
       <div class="style-carousel-controls"><button type="button" class="style-prev" aria-label="上一张场景图">←</button><span class="style-carousel-count" aria-live="polite">01 / 04</span><button type="button" class="style-next" aria-label="下一张场景图">→</button></div>
     </div>
-    <p class="scene-asset-copy">以 AI 生成的雨林树屋场景为参考，将巨树、树屋、枝叶、藤蔓与水域拆分为独立元素，并尝试转化为三维模型。重点观察树屋与树干的结构关系、雨林的层次构图，以及青绿色光影和木质材质能否延续到三维场景中。通过重新组合和调整，验证场景资产在游戏空间中的复用与视角适配能力，同时发现模型结构、风格统一和材质表现等问题，为后续人工修整与游戏资产制作提供依据。</p>
+    <div class="scene-asset-copy">
+      <h3>从 AI 生成图到 UE5 三维场景</h3>
+      <p class="scene-asset-copy-en" lang="en"><strong>From AI-Generated Image to 3D Scene in Unreal Engine 5</strong></p>
+      <p>从 AI 生成的雨林树屋场景开始，探索 <strong>Tripo AI 三维模型生成平台—Autodesk Maya 三维制作软件—Epic Games 虚幻引擎 5</strong> 的完整流程：将巨树、树屋、藤蔓、植被与水域拆分生成，在 Maya 中整理模型与材质，再导入虚幻引擎 5 组合场景。通过测试，评估原图的造型、色彩、材质和空间层次能否延续至三维，并验证资产用于游戏场景的复用与调整潜力。</p>
+    </div>
   </div>`;
   document.querySelector('.ending').before(panel);
 
