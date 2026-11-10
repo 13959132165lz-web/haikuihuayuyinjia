@@ -1,7 +1,7 @@
 (() => {
  'use strict';
  const {cast,scenes,gallery,dims}=window.GX_DATA;
- const base='assets/gx/',esc=s=>String(s).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
+ const base='assets/gx/',toneThumbBase=base+'tone-thumbs/',esc=s=>String(s).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;');
  const media=(f,a,cls='')=>`<button class="image-view ${cls}" data-image="${base+f}" aria-label="放大${esc(a)}"><img src="${base+f}" alt="${esc(a)}" loading="lazy" decoding="async"></button>`;
  const letter=(id,alt)=>`<img class="gx-letter" src="${base}letter-${id}.webp" alt="${alt}">`;
  const panel=(cls,label,body)=>`<section class="panel gx ${cls}" aria-label="${label}" inert><div class="stage">${body}</div></section>`;
@@ -63,7 +63,7 @@
  document.querySelector('.gx-scenes').outerHTML=panel('gx-spaces','古相思曲 · 场景概念',`<div class="gx-subtrack" data-subtrack="scenes" aria-label="五类场景横向展示">${spaces}</div>${subnav(['总览',...scenes.map(s=>s.name)],'场景')}`);
  const toneHead=document.querySelector('.gx-tones .gx-heading');toneHead.classList.add('gx-tone-heading');toneHead.querySelector('h2').innerHTML=letter('tones','色调体系')+'<span>先定全篇影调基准，再让每场戏围绕基准变化</span>';
  toneHead.querySelector('.eyebrow').textContent='CASE 02 / COLOR / COLOR SYSTEM';
- document.querySelector('#track').insertAdjacentHTML('beforeend',panel('gx-contact','古相思曲 · 完整色调排布',`<div class="gx-contact-grid" aria-label="44张色调图">${gallery.map((g,i)=>`<button class="gx-tone-flip" aria-label="色调图${i+1}：${esc(g.original)}，悬停或点击翻转" aria-pressed="false"><span class="gx-flip-inner"><span class="gx-flip-front"><img src="${base+g.file}" alt="${esc(g.original)}" loading="lazy"><i></i></span><span class="gx-flip-back" aria-hidden="true"><img src="${base+g.file}" alt="" loading="lazy"></span></span></button>`).join('')}</div><div class="gx-system-title"><p class="gx-system-kicker">ECHOES OF ANCIENT YEARNING / 44 COLOR STUDIES</p><h2><span>色调体系</span><span lang="en">Color system</span></h2><p>先定全篇影调基准，再让每场戏围绕基准变化</p><p lang="en">First, establish the overall tonal baseline for the entire film,<br>then have each scene revolve around variations of this baseline.</p></div>`));
+ document.querySelector('#track').insertAdjacentHTML('beforeend',panel('gx-contact','古相思曲 · 完整色调排布',`<div class="gx-contact-grid" aria-label="44张色调图">${gallery.map((g,i)=>`<button class="gx-tone-flip" aria-label="色调图${i+1}：${esc(g.original)}，悬停或点击翻转" aria-pressed="false"><span class="gx-flip-inner"><span class="gx-flip-front"><img src="${toneThumbBase+g.file}" alt="${esc(g.original)}" loading="lazy" decoding="async"><i></i></span><span class="gx-flip-back" aria-hidden="true"><img src="${toneThumbBase+g.file}" alt="" loading="lazy" decoding="async"></span></span></button>`).join('')}</div><div class="gx-system-title"><p class="gx-system-kicker">ECHOES OF ANCIENT YEARNING / 44 COLOR STUDIES</p><h2><span>色调体系</span><span lang="en">Color system</span></h2><p>先定全篇影调基准，再让每场戏围绕基准变化</p><p lang="en">First, establish the overall tonal baseline for the entire film,<br>then have each scene revolve around variations of this baseline.</p></div>`));
  document.querySelector('.contents-list li:nth-child(3)').innerHTML='<button data-page="7"><span>古相思曲</span><small>ECHOES OF ANCIENT YEARNING</small></button>';
  document.querySelector('.gx-tones').before(document.querySelector('.gx-contact'));
  const reduced=matchMedia('(prefers-reduced-motion:reduce)'),controllers=new Map();
