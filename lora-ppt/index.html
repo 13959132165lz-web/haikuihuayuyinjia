@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#281b18">
+  <meta name="description" content="梁臻的 AI 美术作品集。ComfyUI 三大工作流与 Lora 训练核心方法论。">
+  <title>织象 · WEAVING VISIONS | 梁臻</title>
+  <link rel="stylesheet" href="./site.css">
+  <script src="./assets/vendor/lenis-1.3.27.min.js" defer></script>
+  <script src="./site.js" defer></script>
+  <script src="./assets/vendor/liquid-chrome.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a href="#1" class="wordmark">织象 <span lang="en">WEAVING VISIONS</span></a>
+    <nav class="chapter-nav" aria-label="作品集页面">
+      <a href="#1" aria-label="封面" aria-current="page">封面</a>
+      <a href="#2">局部重绘</a>
+      <a href="#3">角色拆件</a>
+      <a href="#4">人物改动作</a>
+      <a href="#5">Lora 训练</a>
+    </nav>
+  </header>
+  <main id="deck" aria-label="梁臻的 AI 美术作品集">
+    <section class="panel cover active" data-background="04" aria-labelledby="cover-title">
+      <div class="stage cover-stage">
+        <div class="cover-copy" data-reveal>
+          <h1 id="cover-title"><span class="cover-title-cn chrome-text" data-chrome="织象" data-chrome-tone="red" data-chrome-wrap>织象</span><span class="cover-title-en chrome-text" lang="en" data-chrome="WEAVING VISIONS" data-chrome-tone="red" data-chrome-wrap>WEAVING VISIONS</span></h1>
+          <div class="cover-subtitle">
+            <p class="chrome-text" data-chrome="AI视觉架构 · 工作流与项目实践" data-chrome-tone="red" data-chrome-wrap>AI视觉架构 · 工作流与项目实践</p>
+            <p class="chrome-text" lang="en" data-chrome="AI Visual Architecture · Workflows &amp; Project Practice" data-chrome-tone="red" data-chrome-wrap>AI Visual Architecture · Workflows &amp; Project Practice</p>
+          </div>
+          <div class="cover-motto">
+            <p>以视觉为线，以技术为经纬，将想象织成可见的世界。</p>
+            <p lang="en">Using vision as the thread and technology as the warp and weft,<br> imagination is woven into a visible world.</p>
+          </div>
+          <p class="cover-overview">ComfyUI 三大工作流以及Lora 训练核心方法论</p>
+        </div>
+        <div class="project-folder cover-folder" data-reveal>
+          <div class="folder-tray cover-tray" id="cover-contents" inert>
+            <a href="#2" class="folder-note"><span class="chrome-text" data-chrome="ComfyUI 三大工作流" data-chrome-tone="red" data-chrome-wrap>ComfyUI 三大工作流</span></a>
+            <a href="#5" class="folder-note"><span class="chrome-text" data-chrome="Lora 训练核心方法论" data-chrome-tone="red" data-chrome-wrap>Lora 训练核心方法论</span></a>
+          </div>
+          <button class="folder-toggle" type="button" aria-label="打开作品文件夹" aria-controls="cover-contents" aria-expanded="false">
+            <span class="folder-shape" aria-hidden="true"><i></i></span>
+          </button>
+        </div>
+        <footer class="cover-identity" data-reveal>
+          <p>梁臻 <span>/</span> 应聘方向：AI美术 <span>/</span> 2026</p>
+          <p lang="en">Liang Zhen <span>/</span> Application Focus: AI Art <span>/</span> 2026</p>
+        </footer>
+      </div>
+    </section>
+
+    <section class="panel repaint" data-background="09" aria-labelledby="repaint-title">
+      <div class="stage stage-work">
+        <header class="chapter-head" data-reveal>
+          <h2 id="repaint-title" class="chrome-text" data-chrome="ComfyUI 三大工作流" data-chrome-tone="red" data-chrome-wrap>ComfyUI 三大工作流</h2>
+          <p class="chapter-subtitle chrome-text" data-chrome="comfyUI-局部重绘制" data-chrome-tone="red" data-chrome-wrap>comfyUI-局部重绘制</p>
+          <p class="chapter-model">模型：Qwen Image 2.1 Turbo</p>
+        </header>
+        <div class="chapter-layout">
+          <article class="copy-card" data-reveal>
+            <h3>蒙版局部修图工作流</h3>
+            <p>在原图上圈出要处理的区域，适合修手指、补鞋尖、删除多余手臂、移除头饰，或补画道具挡住的衣料。</p>
+            <ol class="flow" aria-label="蒙版局部修图步骤">
+              <li>载入原图</li><li>圈选编辑区</li><li>扣除脸和头发保护区</li><li>裁出局部及周边</li><li>移除或重绘</li><li>按蒙版贴回原图</li><li>检查并保存</li>
+            </ol>
+            <p>模型只接收选区附近的裁切图，周边保留少量上下文，让新画的轮廓、颜色和笔触能接回原稿。贴回时以原图为底，只写入蒙版内的像素。比如删除多余手臂，选区要从手臂接入肩部或袖口的位置一直盖到指尖，并包含需要补回的衣料。修手指时，选区要容得下整个手掌、拇指和四指，出图后再放大检查数量和关节。补脚如果需要越过原图边缘，就先扩画布，再沿现有鞋身补出鞋尖和鞋底。</p>
+          </article>
+          <div class="gallery" data-gallery="repaint" data-reveal>
+            <p class="gallery-help">点击图片切换原图与重绘结果</p>
+          </div>
+        </div>
+        <div class="project-folder" data-folder="repaint" data-reveal></div>
+      </div>
+    </section>
+
+    <section class="panel parts" data-background="04" aria-labelledby="parts-title">
+      <div class="stage stage-work">
+        <header class="chapter-head" data-reveal>
+          <h2 id="parts-title" class="chrome-text" data-chrome="ComfyUI 三大工作流" data-chrome-tone="red" data-chrome-wrap>ComfyUI 三大工作流</h2>
+          <p class="chapter-subtitle chrome-text" data-chrome="comfyUI-角色拆件" data-chrome-tone="red" data-chrome-wrap>comfyUI-角色拆件</p>
+          <p class="chapter-model">模型：Qwen Image 2.1 Turbo</p>
+        </header>
+        <div class="chapter-layout">
+          <article class="copy-card" data-reveal>
+            <h3>角色拆件四视图工作流</h3>
+            <p>从一张完整角色立绘出发，分别拆出无发头部、独立发块、无头上半身、下半身。每个部件输出正面、左侧面、右侧面和背面，合计 16 张独立的纯白底 PNG。</p>
+            <ol class="flow" aria-label="角色拆件步骤">
+              <li>载入立绘</li><li>裁出部件参考</li><li>生成正面</li><li>以正面为参考生成左右侧面和背面</li><li>纯白底合成</li><li>单图保存</li>
+            </ol>
+            <p>先用 Qwen Image 2.1 Turbo 确定各部件的正面，再让其余三面参考同一张正面，减少转面时的五官、发束、服装和配件漂移。头发单独生成，中心用连续发束填实，并检查有无封闭白洞。上半身保留垂在手下的白布，下半身保留侧腰织物和记事册。侧面、背面及被遮挡的结构来自模型推演，仍需对照原画检查。</p>
+            <p>换角色时，替换输入图、调整裁切框，再修改部件提示词里的五官、服装和不对称细节。确认基础图后，可用附带的 Lanczos 工作流等比放大像素。</p>
+          </article>
+          <div class="gallery parts-gallery" data-gallery="parts" data-reveal></div>
+        </div>
+        <div class="project-folder" data-folder="parts" data-reveal></div>
+      </div>
+    </section>
+
+    <section class="panel pose" data-background="06" aria-labelledby="pose-title">
+      <div class="stage stage-work">
+        <header class="chapter-head" data-reveal>
+          <h2 id="pose-title" class="chrome-text" data-chrome="ComfyUI 三大工作流" data-chrome-tone="red" data-chrome-wrap>ComfyUI 三大工作流</h2>
+          <p class="chapter-subtitle chrome-text" data-chrome="comfyUI-人物改动作" data-chrome-tone="red" data-chrome-wrap>comfyUI-人物改动作</p>
+          <p class="chapter-model">模型：Qwen Image 2.1 Turbo</p>
+        </header>
+        <div class="chapter-layout">
+          <article class="copy-card pose-copy" data-reveal>
+            <div class="pose-diagram" aria-label="人物改动作工作流">
+              <ul class="diagram-inputs">
+                <li><strong>角色原图</strong><span>全身参考 + 五官裁剪</span></li>
+                <li><strong>动作参考</strong><span>裁边 + 等比适配</span></li>
+                <li><strong>提示词</strong><span>共享外观 + 单张动作</span></li>
+              </ul>
+              <ol class="flow diagram-flow">
+                <li>Qwen 多图编码</li><li>采样</li><li>解码</li><li>纯白底合成</li><li>保存 PNG</li>
+              </ol>
+            </div>
+            <table class="reference-table">
+              <thead><tr><th scope="col">输入</th><th scope="col">在工作流里的作用</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">动作参考图</th><td>提供躯干方向、肢体弯曲、前后遮挡和头部朝向。先裁掉截图黑边，再等比适配画布。</td></tr>
+                <tr><th scope="row">角色全身原图</th><td>提供身材比例、发型、服装结构、材质、配色和绘画笔触。</td></tr>
+                <tr><th scope="row">原图五官特写</th><td>给模型更清楚的眼形、瞳色、鼻唇和脸型参考，帮助维持新角度下的角色辨识度。</td></tr>
+              </tbody>
+            </table>
+          </article>
+          <div class="gallery" data-gallery="pose" data-reveal>
+            <p class="gallery-help">点击图片切换生成结果与动作参考</p>
+          </div>
+        </div>
+        <div class="project-folder" data-folder="pose" data-reveal></div>
+      </div>
+    </section>
+
+    <section class="panel lora" data-background="07" aria-labelledby="lora-title">
+      <div class="stage stage-work">
+        <header class="chapter-head" data-reveal>
+          <h2 id="lora-title" class="chrome-text" data-chrome="Lora 训练核心方法论" data-chrome-tone="red" data-chrome-wrap>Lora 训练核心方法论</h2>
+          <p class="chapter-subtitle chrome-text" data-chrome="Lora-Gustav Klimt Vienna Secession painting" data-chrome-tone="red" data-chrome-wrap>Lora-Gustav Klimt Vienna Secession painting</p>
+        </header>
+        <div class="chapter-layout">
+          <article class="copy-card" data-reveal>
+            <h3>如何训练一个Lora？</h3>
+            <ol class="method-list">
+              <li><strong>关键在于素材库</strong><p>高清图片素材，需要先进行修复和甄别，保证素材风格上的一致性，避免素材本身有磨损，变形扭曲，其中面部和手部是重点修复对象，让素材保证在原始纯净的状态。</p></li>
+              <li><strong>核心风格的搭建在于触发词</strong><p>触发词是Lora的概念灵魂。需要做到的是抽离触发词和打标提示词，明确以用定打（用模型生成想要的素材时我会怎么使用这个Lora模型）。</p></li>
+            </ol>
+            <p>比如目前我要训练的画风是克里姆特黄金时期画风，那我要的抽象画风概念部分是 <strong>金箔表面、几何与花卉纹样，以及细腻的人物皮肤和平面装饰之间的对比</strong>。</p>
+            <p>而我要改变的部分包括五官发型，服装细节，具体背景。那我要打标的部分即 <strong>五官发型，服装细节，具体背景</strong>。</p>
+          </article>
+          <div class="lora-results" data-reveal>
+            <div class="gallery" data-gallery="lora">
+              <p class="gallery-help">当前展示生成结果，点击翻面查看训练素材</p>
+            </div>
+            <section class="training-record" aria-labelledby="training-record-title">
+              <h3 id="training-record-title">本次训练</h3>
+              <dl class="training-metrics">
+                <div><dt>模型类型</dt><dd>LoRA</dd></div>
+                <div><dt>训练代码</dt><dd><a href="https://github.com/modelscope/DiffSynth-Studio" target="_blank" rel="noopener noreferrer">DiffSynth-Studio</a></dd></div>
+                <div><dt>训练数据量</dt><dd>24</dd></div>
+                <div><dt>总训练步数</dt><dd>6000</dd></div>
+              </dl>
+              <div class="model-lineage">
+                <h4>模型系谱</h4>
+                <ol>
+                  <li><span>基模型</span><code>krea/Krea-2-Raw</code></li>
+                  <li class="lineage-step">微调 <span aria-hidden="true">→</span></li>
+                  <li><span>当前模型</span><code>krea/Krea-2-Turbo</code></li>
+                </ol>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-controls" aria-label="翻页控制">
+    <button type="button" data-step="-1" aria-label="上一页"><span class="chevron previous" aria-hidden="true"></span></button>
+    <output class="page-count" aria-live="polite">01 <span>/</span> 05</output>
+    <button type="button" data-step="1" aria-label="下一页"><span class="chevron" aria-hidden="true"></span></button>
+  </footer>
+  <dialog class="image-dialog" aria-labelledby="image-title">
+    <header><h2 id="image-title"></h2><button type="button" class="close-dialog" aria-label="关闭图片">×</button></header>
+    <div class="image-dialog-body"><img alt=""></div>
+  </dialog>
+</body>
+</html>
